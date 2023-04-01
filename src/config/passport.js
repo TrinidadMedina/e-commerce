@@ -10,13 +10,16 @@ exports.login = new LocalStrategy(
         passwordField: 'password'
     },
     async (email, password, done) => {
-        const userData = await UserModel.findOne({email:email, password: md5(password)});
-        if(!userData){
-            return done(null, false);
+        const userMail = await UserModel.findOne({email:email});
+        if(!userMail){
+            return done(null, false, {message: 'Usuario no encontrado'});
         }
-        done(null, userData)
+        const userPass = await UserModel.findOne({password: md5(password)});
+        if(!userPass){
+            return done(null, false, {message: 'Contraseña incorrecta'});
+        }
+        done(null, userMail)
     })
-
 
 exports.signup =
 new LocalStrategy({
@@ -26,7 +29,7 @@ new LocalStrategy({
 }, async (req, email, password, done) => {
     const userData = await UserModel.findOne({email: email, password: md5(password)});
     if(userData){
-        return done(null, false);
+        return done(null, false,  {message: 'Usuario ya existe'});
     }
     const stageUser = new UserModel({
         email: req.body.email,
@@ -40,15 +43,3 @@ new LocalStrategy({
     const newUser = await stageUser.save();
     done(null, newUser);
 })
-
-/* passport.serializeUser((user, done) => {
-    done(null, user._id);
-});
-
-passport.deserializeUser(async (id, done) => {
-    const userData = await UserModel.findById(id);
-    done(null, userData);
-});
-
-app.use(passport.initialize());
-app.use(passport.session()) */

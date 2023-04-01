@@ -8,8 +8,8 @@ const COOKIES_SECRET = process.env.COOKIES_SECRET || 'default';
 exports.session = session({
     store: MongoStore.create(getStoreConfig()),
     secret: COOKIES_SECRET,
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
     cookie: {
         httpOnly: false,
         secure: false
