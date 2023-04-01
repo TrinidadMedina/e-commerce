@@ -17,6 +17,11 @@ class CartServices {
         return carts;
     };
 
+    async getCart(uuid) {
+        const cart = await this.dao.getOne(uuid);
+        return cart;
+    };
+
     async insertProduct(userId, productId) {
         const cart = await this.dao.insertProduct(userId, productId);
         console.log(1, cart)
@@ -28,10 +33,10 @@ class CartServices {
         return cart;
     };
 
-/*     async deleteCart(uuid) {
+    async deleteCart(uuid) {
         const cart = await this.dao.delete(uuid);
         return cart;
-    }; */
+    };
 };
 
 module.exports = new CartServices();

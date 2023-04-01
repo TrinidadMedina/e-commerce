@@ -10,7 +10,8 @@ class ProductServices {
         Object.assign(data, {
             uuid: uuidv4()
         });
-      return await this.dao.createProduct(data);
+      const newProduct = await this.dao.createProduct(data);
+      return newProduct;
     };
 
     async getProducts() {
@@ -18,7 +19,7 @@ class ProductServices {
       return products;
     };
 
-/*     async getProduct(uuid) {
+    async getProduct(uuid) {
       const product = await this.dao.getOne(uuid);
       return product;
     }
@@ -26,7 +27,7 @@ class ProductServices {
     async deleteProduct(uuid) {
       const deletedProduct = await this.dao.delete(uuid);
       return deletedProduct;
-    }; */
+    };
 };
 
 module.exports = new ProductServices();

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { getMongoConfig } = require('../../services/session/session.config');
+const { getMongoConfig } = require('../config/session.config');
 
 const mongooseConnect = () => {
     const MONGO_URI = process.env.MONGO_URI;

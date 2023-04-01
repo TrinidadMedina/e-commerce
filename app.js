@@ -1,21 +1,16 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const session = require('express-session');
-const MongoStore = require('connect-mongo');
 const logger = require('morgan');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const md5 = require('md5');
 const compression = require('compression');
-
-const mongooseConnect = require('./src/utils/db/connect');
-const { getStoreConfig } = require('./src/services/session/session.config');
+const mongooseConnect = require('./src/utils/connect-mongo');
 const indexRouter = require('./src/routes/index');
-const errorHandler = require('./src/middlewares/errorHandler');
+const {login, signup} = require('./src/config/passport');
+const {session} = require('./src/utils/connect-session')
 const loggerConsole = require('./log4js').loggerConsole;
 const loggerFile = require('./log4js').loggerFile;
 
-const UserModel = require('./src/models/user.model');
+const UserModel = require('./src/utils/models/user.model');
 
 require('dotenv').config();
 
@@ -35,53 +30,14 @@ mongooseConnect();
 
 app.use(cookieParser(COOKIES_SECRET));
 
-app.use(session({
-    store: MongoStore.create(getStoreConfig()),
-    secret: COOKIES_SECRET,
-    resave: true,
-    saveUninitialized: true,
-    cookie: {
-        httpOnly: false,
-        secure: false
-    }
-}));
+app.use(session);
 
-app.set('views', './views');
+app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
-passport.use('login', new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password'
-},
-async (email, password, done) => {
-    const userData = await UserModel.findOne({email:email, password: md5(password)});
-    if(!userData){
-       return done(null, false);
-    }
-    done(null, userData)
-}));
+passport.use('login', login)
 
-passport.use('signup', new LocalStrategy({
-    passReqToCallback: true,
-    usernameField: 'email',
-    passwordField: 'password'
-}, async (req, email, password, done) => {
-    const userData = await UserModel.findOne({email: email, password: md5(password)});
-    if(userData){
-        return done(null, false);
-    }
-    const stageUser = new UserModel({
-        email: req.body.email,
-        password: md5(password),
-        username: req.body.username,
-        address: req.body.address,
-        age: req.body.age,
-        number: req.body.number,
-        photo: req.body.photo
-    });
-    const newUser = await stageUser.save();
-    done(null, newUser);
-}));
+passport.use('signup', signup)
 
 passport.serializeUser((user, done) => {
     done(null, user._id);
@@ -96,7 +52,5 @@ app.use(passport.initialize());
 app.use(passport.session())
 
 app.use(indexRouter);
-
-app.use(errorHandler);
 
 module.exports = app;

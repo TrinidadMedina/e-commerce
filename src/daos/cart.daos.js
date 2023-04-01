@@ -1,6 +1,6 @@
-const MongoContainer = require('../container/mongo.container');
-const cartModel = require('../models/cart.model');
-const productModel = require('../models/product.model');
+const MongoContainer = require('../containers/mongo.container');
+const cartModel = require('../utils/models/cart.model');
+const productModel = require('../utils/models/product.model');
 
 class CartsDao extends MongoContainer {
   constructor() {

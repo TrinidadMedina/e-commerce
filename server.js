@@ -6,6 +6,13 @@ const numCPUs = require('os').cpus().length;
 const options = {default:{PORT: 8080, MODO: 'FORK'}}
 
 const argParams = minimist(process.argv.slice(2), options);
+
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, () => {
+    console.info(`Server up and running on port: ${PORT}`)
+})
+
 /* const PORT = argParams.PORT;
 const MODO = argParams.MODO;
 
@@ -28,9 +35,3 @@ const MODO = argParams.MODO;
         console.info(`Server up and running on port: ${PORT}`);
     });
 } */
-
-const PORT = process.env.PORT || 3001;
-
- app.listen(PORT, () => {
-    console.info(`Server up and running on port: ${PORT}`)
-})
