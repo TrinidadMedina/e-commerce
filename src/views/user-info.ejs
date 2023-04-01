@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Mi sitio web</title>
+	<title>Tienda</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
@@ -11,7 +11,7 @@
         <img src="https://cdn1.iconfinder.com/data/icons/supermarket-20/64/supermarket-grocery-store-food-512.png" width="30" height="30" class="d-inline-block align-top" alt="">
         la tienda
       </a>
-      <h4 class="nav-link active mx-auto">Carrito</h4>
+        <h4 class="nav-link active mx-auto">Mi información</h4>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -20,12 +20,12 @@
           <li class="nav-item">
             <a class="nav-link" href="/">Menú <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="/cart">Carrito</a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <%= fullname %>
+            <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <%= userData.username %>
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="/user-info">Información</a>
@@ -43,38 +43,29 @@
 	</header>
 	<main>
     <table class="table mx-auto mt-5" style="width: 500px;">
-      <tbody>
-        <% options.forEach(i=>{ %>
-          <% i.products.forEach(p=>{ %>
-            <tr>
-              <td><img class="img-fluid" style='width: 50px' src= <%= p.product.image %> ></td>
-              <td style="line-height: 0.5;">
-                <p ><%= p.product.name %></p>
-                <p >$<%= p.product.price %></p>
-              </td>
-              <td>
-                <p ><%= p.quant %></p>
-              </td>
-              <td>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <form action="/cart/delete" method="post">
-                      <input class="d-none" type="text" id="products" name="products" value=<%= p.product._id %>>
-                      <button type="submit" class="btn btn-sm btn-outline-secondary"> - </button>
-                    </form>
-                    <form action="cart/insert" method="post">
-                      <input class="d-none" type="text" id="products" name="products" value=<%= p.product._id %>>
-                      <button type="submit" class="btn btn-sm btn-outline-secondary">+</button>
-                    </form>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          <% }) %>
-        <% }) %>
-      </tbody>
-
-    </table>
+        <tbody>
+          <tr>
+            <th>Nombre</th>
+            <td><%= userData.username %></td>
+          </tr>
+          <tr>
+            <th>Email</th>
+            <td><%= userData.email %></td>
+          </tr>
+          <tr>
+            <th>Dirección</th>
+            <td><%= userData.address %></td>
+          </tr>
+          <tr>
+            <th>Edad</th>
+            <td><%= userData.age %></td>
+          </tr>
+          <tr>
+            <th>Número de teléfono</th>
+            <td><%= userData.number %></td>
+          </tr>
+        </tbody>
+      </table>
   </main>
 
   <footer class="text-muted footer fixed-bottom" style="background-color: #eee">

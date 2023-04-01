@@ -48,12 +48,23 @@ exports.getCart = async (req, res) => {
     }
 }
 
+exports.getUserInfo = async (req, res) => {
+    try{
+        const userData = req.user;
+        console.log(userData)
+        res.render('user-info', {userData});
+    }catch(err){
+        console.error(err.message);
+        res.render('error');
+    }
+}
+
 exports.getError = async (req, res) => {
     try{
         const message = req.flash('error')[0];
         res.render('error', {message});
     }catch(err){
         console.error(err.message);
-        res.render('error');
+        res.render('error', {message: err.message});
     }
 }
