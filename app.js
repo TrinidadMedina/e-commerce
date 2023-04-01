@@ -9,7 +9,7 @@ const {login, signup} = require('./src/config/passport');
 const {session} = require('./src/utils/connect-session')
 const loggerConsole = require('./log4js').loggerConsole;
 const loggerFile = require('./log4js').loggerFile;
-
+const flash = require('connect-flash');
 const UserModel = require('./src/utils/models/user.model');
 
 require('dotenv').config();
@@ -43,6 +43,7 @@ passport.serializeUser((user, done) => {
     done(null, user._id);
 });
 
+
 passport.deserializeUser(async (id, done) => {
     const userData = await UserModel.findById(id);
     done(null, userData);
@@ -51,6 +52,8 @@ passport.deserializeUser(async (id, done) => {
 app.use(passport.initialize());
 app.use(passport.session())
 
+app.use(flash());
 app.use(indexRouter);
+
 
 module.exports = app;

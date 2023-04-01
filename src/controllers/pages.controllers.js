@@ -1,5 +1,6 @@
 const productServices = require('../services/product/product.services');
 const cartServices = require('../services/cart/cart.services');
+const flash = require('connect-flash');
 
 exports.getLogin = async (req, res) => {
     try{
@@ -21,7 +22,7 @@ exports.getSignup = async (req, res) => {
         res.render('signup');
     }catch(err){
         console.error(err.message);
-        res.render('error');
+        res.render('error', {error: err.message});
     }
 }
 
@@ -32,7 +33,7 @@ exports.getHome = async (req, res) => {
         res.render('home', {options: data, fullname: userData.username});
     }catch(err){
         console.error(err);
-        res.redirect('/');
+        res.render('error', {error: err.message});
     }
 }
 
@@ -43,13 +44,14 @@ exports.getCart = async (req, res) => {
         res.render('cart', {options: data, fullname: userData.username});
     }catch(err){
         console.error(err);
-        res.redirect('/');
+        res.render('error', {error: err.message});
     }
 }
 
-exports.getError = async (_req, res) => {
+exports.getError = async (req, res) => {
     try{
-        res.render('error');
+        const message = req.flash('error')[0];
+        res.render('error', {message});
     }catch(err){
         console.error(err.message);
         res.render('error');
