@@ -22,10 +22,9 @@ const userSchema = new Schema({
     number: {
         type: Number
     },
-    photo: {
+    image: {
         type: String
-    },
-
+    }
 });
 
 const userModel = mongoose.model('user', userSchema);

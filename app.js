@@ -21,6 +21,7 @@ const COOKIES_SECRET = process.env.COOKIES_SECRET || 'default';
 app.use(compression());
 
 app.use(express.static('public'));
+app.use('/images', express.static('public/images'));
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -43,7 +44,6 @@ passport.serializeUser((user, done) => {
     done(null, user._id);
 });
 
-
 passport.deserializeUser(async (id, done) => {
     const userData = await UserModel.findById(id);
     done(null, userData);
@@ -54,6 +54,7 @@ app.use(passport.session())
 
 app.use(flash());
 app.use(indexRouter);
+
 
 
 module.exports = app;

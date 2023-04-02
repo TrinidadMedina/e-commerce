@@ -11,7 +11,7 @@
         <img src="https://cdn1.iconfinder.com/data/icons/supermarket-20/64/supermarket-grocery-store-food-512.png" width="30" height="30" class="d-inline-block align-top" alt="">
         la tienda
       </a>
-        <h4 class="nav-link active mx-auto">Mi información</h4>
+      <h3 class="nav-link active mx-auto">Mi información</h3>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -24,20 +24,37 @@
             <a class="nav-link" href="/cart">Carrito</a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <%= userData.username %>
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <div style="  width: 40px; height: 40px; border-radius: 50%; overflow: hidden;">
+                <img src=<%= userData.image %> style="  width: 100%; height: 100%; object-fit: cover;" alt="Imagen de usuario">
+              </div>
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <div class="dropdown-menu" style="right: 0; left: auto;" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="/user-info">Información</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="/signout">Salir</a>
             </div>
           </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
-        </form>
+      </div>
+
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="myModalLabel">¡Bienvenido!</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Este es mi popup.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
 	</header>
@@ -63,6 +80,12 @@
           <tr>
             <th>Número de teléfono</th>
             <td><%= userData.number %></td>
+          </tr>
+          <tr>
+            <th>Imagen</th>
+            <td style="  width: 30px; height: auto; border-radius: 50%; overflow: hidden;">
+              <img src=<%= userData.image %> style="  width: 100%; height: 100%; object-fit: cover;" alt="Imagen de usuario">
+            </td>
           </tr>
         </tbody>
       </table>
