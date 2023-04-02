@@ -1,5 +1,7 @@
-/* La imagen se podrá subir al servidor y se guardará en una carpeta pública del mismo a la cual se tenga acceso por url.
-ver los productos totales con los filtros que se hayan implementado y su propio carrito de compras e información propia (datos de registro con la foto).
+/* IMAGEN:
+
+ver los productos totales con los filtros que se hayan implementado
+
 Ante la incorporación de un usuario, el servidor enviará un email al administrador con todos los datos de registro y asunto 'nuevo registro', a una dirección que se encuentre por el momento almacenada en una constante global.
 Envío de un email y un mensaje de whatsapp al administrador desde el servidor, a un número de contacto almacenado en una constante global.
 

@@ -1,6 +1,7 @@
+const fs = require('fs');
+const path = require('path');
 const productServices = require('../services/product/product.services');
 const cartServices = require('../services/cart/cart.services');
-const flash = require('connect-flash');
 
 exports.getLogin = async (req, res) => {
     try{
@@ -30,10 +31,11 @@ exports.getHome = async (req, res) => {
     try{
         const userData = req.user;
         const data = await productServices.getProducts();
-        res.render('home', {options: data, fullname: userData.username});
+        res.render('home', {options: data, userData});
+
     }catch(err){
         console.error(err);
-        res.render('error', {error: err.message});
+        res.render('error', {message: err.message});
     }
 }
 
@@ -41,7 +43,7 @@ exports.getCart = async (req, res) => {
     try{
         const userData = req.user;
         const data = await cartServices.getCarts(userData._id);
-        res.render('cart', {options: data, fullname: userData.username});
+        res.render('cart', {options: data, userData});
     }catch(err){
         console.error(err);
         res.render('error', {error: err.message});
@@ -51,7 +53,6 @@ exports.getCart = async (req, res) => {
 exports.getUserInfo = async (req, res) => {
     try{
         const userData = req.user;
-        console.log(userData)
         res.render('user-info', {userData});
     }catch(err){
         console.error(err.message);

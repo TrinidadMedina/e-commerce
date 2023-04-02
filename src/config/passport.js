@@ -1,8 +1,6 @@
-const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const md5 = require('md5');
 const UserModel = require('../utils/models/user.model');
-
 
 exports.login = new LocalStrategy(
     {
@@ -27,10 +25,11 @@ new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
 }, async (req, email, password, done) => {
-    const userData = await UserModel.findOne({email: email, password: md5(password)});
+    const userData = await UserModel.findOne({email: email});
     if(userData){
         return done(null, false,  {message: 'Usuario ya existe'});
     }
+    const rutaImagen = '/images/' + req.file.filename;
     const stageUser = new UserModel({
         email: req.body.email,
         password: md5(password),
@@ -38,7 +37,7 @@ new LocalStrategy({
         address: req.body.address,
         age: req.body.age,
         number: req.body.number,
-        photo: req.body.photo
+        image: rutaImagen
     });
     const newUser = await stageUser.save();
     done(null, newUser);

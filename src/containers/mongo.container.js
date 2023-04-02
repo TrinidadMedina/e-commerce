@@ -18,7 +18,6 @@ class MongoContainer {
             if(!_.isEmpty(prod)){
                   return 'Producto ya existe en tu carro'
             }else{
-                //console.log(data.user, data.products.product)
                 await this.model.updateOne({_id: cart._id}, { $push: {products: { product: data.products.product[0] }} });
                 return
             }
@@ -45,7 +44,7 @@ class MongoContainer {
                 return await this.model.find();
             } 
             const cart = await this.model.findOne({user: userId}).populate('products.product');
-            return [cart]
+            return cart
         }catch(err){
             throw new Error(err.message);
         }   
