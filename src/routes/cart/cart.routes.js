@@ -3,7 +3,8 @@ const {
   createCart,
   createProduct,
   insertProduct,
-  deleteProduct
+  deleteProduct,
+  buyCart
 } = require ('../../controllers/cart.controllers');
 
 router
@@ -11,5 +12,6 @@ router
 .post('/', createProduct)
 .post('/insert', insertProduct)
 .post('/delete', deleteProduct)
+.post('/buy', buyCart)
 
 module.exports = router;

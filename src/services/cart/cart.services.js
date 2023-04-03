@@ -17,10 +17,10 @@ class CartServices {
         return carts;
     };
 
-    async getCart(uuid) {
+/*     async getCart(uuid) {
         const cart = await this.dao.getOne(uuid);
         return cart;
-    };
+    }; */
 
     async insertProduct(userId, productId) {
         const cart = await this.dao.insertProduct(userId, productId);
