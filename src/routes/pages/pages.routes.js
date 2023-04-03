@@ -7,7 +7,9 @@ const {
     getHome,
     getCart,
     getUserInfo,
-    getError
+    getAuthError,
+    getError,
+    getSuccess
 } = require ('../../controllers/pages.controllers');
 
 router
@@ -16,6 +18,8 @@ router
 .get('/home', authMiddleware, getHome)
 .get('/cart', authMiddleware, getCart)
 .get('/user-info', authMiddleware, getUserInfo)
-.get('/error', getError);
+.get('/auth-error', getAuthError)
+.get('/error', getError)
+.get('/success', getSuccess);
 
 module.exports = router;

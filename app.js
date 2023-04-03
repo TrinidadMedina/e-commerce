@@ -7,10 +7,9 @@ const mongooseConnect = require('./src/utils/connect-mongo');
 const indexRouter = require('./src/routes/index');
 const {login, signup} = require('./src/config/passport');
 const {session} = require('./src/utils/connect-session')
-const loggerConsole = require('./log4js').loggerConsole;
-const loggerFile = require('./log4js').loggerFile;
 const flash = require('connect-flash');
 const UserModel = require('./src/utils/models/user.model');
+const errorMiddleware = require('./src/middlewares/error.middleware')
 
 require('dotenv').config();
 
@@ -54,6 +53,8 @@ app.use(passport.session())
 
 app.use(flash());
 app.use(indexRouter);
+
+app.use(errorMiddleware)
 
 
 
