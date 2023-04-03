@@ -1,10 +1,10 @@
-exports.getSignout =  async (req, res)=>{
+exports.getSignout =  async (req, res, next)=>{
     try{
         req.logout(() => {
             res.redirect('/');
         })
     }catch(err){
-       console.error(err)
+       next(err)
     } 
 };
 

@@ -3,7 +3,6 @@ const cartServices = require('../services/cart/cart.services');
 
 exports.getLogin = async (req, res, next) => {
     try{
-        console.log(req.path)
         if(req.isAuthenticated()){
             return res.redirect('/home')
         }
