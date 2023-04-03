@@ -1,12 +1,7 @@
 const app = require('./app');
-//const minimist = require('minimist');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 const loggerConsole = require('./src/utils/log4js').loggerConsole;
-
-const options = {default:{PORT: 8080, MODO: 'FORK'}}
-
-//const argParams = minimist(process.argv.slice(2), options);
 
 const PORT = process.env.PORT || 3001;
 const SERVER_TYPE = process.env.SERVER_TYPE || 'fork';
