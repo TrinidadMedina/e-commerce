@@ -1,6 +1,8 @@
 const cartServices = require('../services/cart/cart.services');
 const productServices = require('../services/product/product.services')
 const _ = require('lodash');
+const {sendMail} = require('../utils/nodemailer');
+const {sendMessage} = require('../utils/twilio')
 
 exports.createCart =  async (req, res)=>{
     try{
@@ -54,5 +56,26 @@ exports.deleteProduct = async (req, res)=>{
         res.redirect('/cart')  
     }catch(err){
         console.error(err)
+    } 
+};
+
+exports.buyCart =  async (req, res)=>{
+    try{
+        //guardar carro en enviados
+        //eliminar carro
+        const adminNumber = '992182531';
+        const userData = req.user; 
+        const cart = await cartServices.getCarts(userData._id)
+        const products = cart.products
+        const listProduct = products.map(prod => {
+           return {name: prod.product.name, price: prod.product.price, quant: prod.quant, total: prod.product.price*prod.quant}
+        })
+        const finalData = {name: userData.username, email: userData.email, number: userData.number, products: listProduct}
+        sendMail(`nuevo pedido de ${finalData.name}, ${finalData.email}`, JSON.stringify(finalData));
+        sendMessage(`whatsapp:+56${adminNumber}`, JSON.stringify(finalData));
+        sendMessage(`+56${finalData.number}`, 'su pedido ha sido recibido y se encuentra en proceso')
+        res.redirect('/cart')
+    }catch(err){
+       console.error(err.message)
     } 
 };

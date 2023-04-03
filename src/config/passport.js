@@ -1,6 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy;
 const md5 = require('md5');
 const UserModel = require('../utils/models/user.model');
+const {sendMail} = require('../utils/nodemailer')
 
 exports.login = new LocalStrategy(
     {
@@ -19,26 +20,29 @@ exports.login = new LocalStrategy(
         done(null, userMail)
     })
 
-exports.signup =
-new LocalStrategy({
-    passReqToCallback: true,
-    usernameField: 'email',
-    passwordField: 'password'
-}, async (req, email, password, done) => {
-    const userData = await UserModel.findOne({email: email});
-    if(userData){
-        return done(null, false,  {message: 'Usuario ya existe'});
+exports.signup = new LocalStrategy(
+    {
+        passReqToCallback: true,
+        usernameField: 'email',
+        passwordField: 'password'
+    }, 
+    async (req, email, password, done) => {
+        const userData = await UserModel.findOne({email: email});
+        if(userData){
+            return done(null, false,  {message: 'Usuario ya existe'});
+        }
+        const rutaImagen = '/images/' + req.file.filename;
+        const stageUser = new UserModel({
+            email: req.body.email,
+            password: md5(password),
+            username: req.body.username,
+            address: req.body.address,
+            age: req.body.age,
+            number: req.body.number,
+            image: rutaImagen
+        });
+        const newUser = await stageUser.save();
+        done(null, newUser);
+        sendMail('nuevo registro', JSON.stringify(newUser));   
     }
-    const rutaImagen = '/images/' + req.file.filename;
-    const stageUser = new UserModel({
-        email: req.body.email,
-        password: md5(password),
-        username: req.body.username,
-        address: req.body.address,
-        age: req.body.age,
-        number: req.body.number,
-        image: rutaImagen
-    });
-    const newUser = await stageUser.save();
-    done(null, newUser);
-})
+);
