@@ -1,4 +1,4 @@
-const _ = require('lodash')
+const _ = require('lodash');
 
 class MongoContainer {
 
@@ -34,7 +34,7 @@ class MongoContainer {
             }
             return await this.model.create(data);
         }catch(err){
-
+            throw new Error(err.message)
         }
     }
 
@@ -65,12 +65,12 @@ class MongoContainer {
         }   
     };
 
-    async delete(uuid) {
+    async delete(userId) {
         try{
-            let data = await this.model.deleteOne({uuid: uuid});
-            return data.deletedCount === 0 ? null : data;
+            let data = await this.model.deleteOne({user: userId});
+            return
         }catch(err){
-            throw new Error(err);
+            throw new Error(err.message);
         }
     };
 
@@ -84,7 +84,7 @@ class MongoContainer {
             );
             return 'Producto agregado'
         }catch(err){
-            console.log(err);
+            throw new Error(err.message)
         }
     };
 
@@ -104,7 +104,7 @@ class MongoContainer {
             
             return 'Producto eliminado'
         }catch(err){
-            throw new Error(err);
+            throw new Error(err.message);
         }
     };
 }

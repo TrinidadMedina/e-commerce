@@ -24,7 +24,6 @@ class CartServices {
 
     async insertProduct(userId, productId) {
         const cart = await this.dao.insertProduct(userId, productId);
-        console.log(1, cart)
         return cart;
     };
 
@@ -33,8 +32,8 @@ class CartServices {
         return cart;
     };
 
-    async deleteCart(uuid) {
-        const cart = await this.dao.delete(uuid);
+    async deleteCart(userId) {
+        const cart = await this.dao.delete(userId);
         return cart;
     };
 };

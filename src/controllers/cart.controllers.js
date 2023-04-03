@@ -2,20 +2,20 @@ const cartServices = require('../services/cart/cart.services');
 const productServices = require('../services/product/product.services')
 const _ = require('lodash');
 const {sendMail} = require('../utils/nodemailer');
-const {sendMessage} = require('../utils/twilio')
+const {sendMessage} = require('../utils/twilio');
 
-exports.createCart =  async (req, res)=>{
+exports.createCart =  async (req, res, next)=>{
     try{
         const userData = req.user; 
         const productId = Object.values(req.body);    
         await cartServices.createCart(userData._id, productId);
-        res.redirect('/home')
+        res.redirect('/home');
     }catch(err){
-       console.error(err)
+        next(err);
     } 
 };
 
-exports.createProduct =  async (req, res)=>{
+exports.createProduct =  async (req, res, next)=>{
     try{
         const {body} = req;
         if(_.isEmpty(body)){
@@ -33,49 +33,47 @@ exports.createProduct =  async (req, res)=>{
         await productServices.createProduct(body);
         res.redirect('/home')
     }catch(err){
-       console.error(err.message)
+        next(err);
     } 
 };
 
-exports.insertProduct = async (req, res) => {
+exports.insertProduct = async (req, res, next) => {
     try{
         const productId = Object.values(req.body);  
         const userData = req.user; 
         await cartServices.insertProduct(userData._id, productId);
         res.redirect('/cart')
     }catch(err){
-        console.error(err)
+        next(err);
     }
 };
 
-exports.deleteProduct = async (req, res)=>{
+exports.deleteProduct = async (req, res, next)=>{
     try{
         const productId = Object.values(req.body);  
         const userData = req.user; 
         await cartServices.deleteProduct(userData._id, productId);
         res.redirect('/cart')  
     }catch(err){
-        console.error(err)
+        next(err);
     } 
 };
 
-exports.buyCart =  async (req, res)=>{
+exports.buyCart =  async (req, res, next)=>{
     try{
-        //guardar carro en enviados
-        //eliminar carro
         const adminNumber = '992182531';
         const userData = req.user; 
         const cart = await cartServices.getCarts(userData._id)
-        const products = cart.products
-        const listProduct = products.map(prod => {
+        const listProduct = cart.products.map(prod => {
            return {name: prod.product.name, price: prod.product.price, quant: prod.quant, total: prod.product.price*prod.quant}
         })
         const finalData = {name: userData.username, email: userData.email, number: userData.number, products: listProduct}
-        sendMail(`nuevo pedido de ${finalData.name}, ${finalData.email}`, JSON.stringify(finalData));
-        sendMessage(`whatsapp:+56${adminNumber}`, JSON.stringify(finalData));
-        sendMessage(`+56${finalData.number}`, 'su pedido ha sido recibido y se encuentra en proceso')
-        res.redirect('/cart')
+        await sendMail(`nuevo pedido de ${finalData.name}, ${finalData.email}`, JSON.stringify(finalData));
+        await sendMessage(`whatsapp:+56${adminNumber}`, JSON.stringify(finalData));
+        await sendMessage(`+56${finalData.number}`, 'su pedido ha sido recibido y se encuentra en proceso');
+        await cartServices.deleteCart(userData._id)
+        res.redirect('/success')
     }catch(err){
-       console.error(err.message)
+        next(err);
     } 
 };

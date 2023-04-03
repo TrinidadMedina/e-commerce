@@ -15,13 +15,13 @@ router
 .post('/signup', upload.single("image"), (req, res) =>{
   passport.authenticate('signup', {
     successRedirect: '/home',
-    failureRedirect: '/error',
+    failureRedirect: '/auth-error',
     failureFlash: true
   })(req, res);
 })
 .post('/', passport.authenticate('login', {
   successRedirect: '/home',
-  failureRedirect: '/error',
+  failureRedirect: '/auth-error',
   failureFlash: true
 }))
 .get('/signout', getSignout);

@@ -1,7 +1,8 @@
 const twilio = require('twilio');
+require('dotenv').config()
 
-const accountSid = 'ACaded7e05affc1eb1ba3bbf4a960c04ed';
-const authToken = 'afaf0a93cd6e4b5e4d64abb068bdf709';
+const accountSid = process.env.ACCOUNT_SID
+const authToken = process.env.AUTHTOKEN;
 
 const client = twilio(accountSid, authToken);
 
@@ -11,11 +12,11 @@ exports.sendMessage = async (number, body) => {
             body: body,
             from: number.includes('whatsapp') ? 'whatsapp:+14155238886' : '+15074835249',
             to: number
-        })
-    } catch (error) {
-        console.log(error)
+        });
+    }catch(err) {
+        throw new Error(err.message);
     }
-}
+};
 
 
 
