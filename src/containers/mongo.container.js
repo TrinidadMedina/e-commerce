@@ -1,4 +1,5 @@
 const _ = require('lodash');
+let instance = null;
 
 class MongoContainer {
 
@@ -107,6 +108,13 @@ class MongoContainer {
             throw new Error(err.message);
         }
     };
+
+    static getInstance() {
+        if(!instance){
+            instance = new MongoContainer();
+        }
+        return instance;
+    }
 }
 
 module.exports = MongoContainer;

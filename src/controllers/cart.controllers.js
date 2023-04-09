@@ -1,5 +1,5 @@
-const cartServices = require('../services/cart/cart.services');
-const productServices = require('../services/product/product.services')
+const cartServices = require('../services/cart/cart.services').getInstance();
+const productServices = require('../services/product/product.services').getInstance();
 const _ = require('lodash');
 const {sendMail} = require('../utils/nodemailer');
 const {sendMessage} = require('../utils/twilio');

@@ -1,5 +1,6 @@
 const {v4 : uuidv4} = require('uuid');
 const DaoService = require('../../daos/cart.daos');
+let instance = null;
   
 class CartServices { 
     constructor() {
@@ -36,6 +37,13 @@ class CartServices {
         const cart = await this.dao.delete(userId);
         return cart;
     };
+
+    static getInstance() {
+        if(!instance){
+            instance = new CartServices();
+        }
+        return instance;
+    }
 };
 
-module.exports = new CartServices();
+module.exports = CartServices;
