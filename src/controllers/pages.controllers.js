@@ -1,5 +1,5 @@
-const productServices = require('../services/product/product.services');
-const cartServices = require('../services/cart/cart.services');
+const productServices = require('../services/product/product.services').getInstance();
+const cartServices = require('../services/cart/cart.services').getInstance();
 
 exports.getLogin = async (req, res, next) => {
     try{
