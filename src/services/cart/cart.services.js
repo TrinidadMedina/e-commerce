@@ -1,12 +1,13 @@
 const {v4 : uuidv4} = require('uuid');
-const CartDAOFactory = require('../../daos/factory')
+const CartDAOFactory = require('../../daos/factory');
 
 const daoType = process.argv[2];
 console.log(daoType)
 
 class CartServices { 
     constructor() {
-        this.dao = CartDAOFactory.getCartDAO(daoType); // Obtiene el DAO correspondiente
+        const factory = CartDAOFactory.getInstance();
+        this.dao = factory.getCartDAO(daoType); // Obtiene el DAO correspondiente
         this.products = [
             {"name":"plátano","description":"fruta amarilla","image":"https://cdn4.iconfinder.com/data/icons/fruits-79/48/15-banana-512.png","price":1500,"stock":100},
             {"name":"palta","description":"fruta verde","image":"https://cdn4.iconfinder.com/data/icons/fruits-79/48/20-avocado-512.png","price":4000,"stock":10},
