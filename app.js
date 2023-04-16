@@ -8,7 +8,7 @@ const mongooseConnect = require('./src/utils/connect-mongo');
 const indexRouter = require('./src/routes/index');
 const {login, signup} = require('./src/config/passport');
 const {session} = require('./src/utils/connect-session');
-const UserModel = require('./src/utils/models/user.model');
+const UserModel = require('./src/containers/mongo/models/mongo.user.model');
 const errorMiddleware = require('./src/middlewares/error.middleware');
 
 require('dotenv').config();

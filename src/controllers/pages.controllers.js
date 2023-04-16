@@ -1,5 +1,4 @@
-const productServices = require('../services/product/product.services').getInstance();
-const cartServices = require('../services/cart/cart.services').getInstance();
+const cartServices = require('../services/cart/cart.services');
 
 exports.getLogin = async (req, res, next) => {
     try{
@@ -26,7 +25,7 @@ exports.getSignup = async (req, res, next) => {
 exports.getHome = async (req, res, next) => {
     try{
         const userData = req.user;
-        const data = await productServices.getProducts();
+        const data = await cartServices.getProducts();
         res.render('home', {options: data, userData});
 
     }catch(err){
@@ -37,7 +36,7 @@ exports.getHome = async (req, res, next) => {
 exports.getCart = async (req, res, next) => {
     try{
         const userData = req.user;
-        const data = await cartServices.getCarts(userData._id);
+        const data = await cartServices.getCart(userData._id);
         res.render('cart', {options: data, userData});
     }catch(err){
         next(err);

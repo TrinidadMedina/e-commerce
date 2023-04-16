@@ -85,11 +85,11 @@
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <form action="/cart/delete" method="post">
-                        <input class="d-none" type="text" id="products" name="products" value=<%= p.product._id %>>
+                        <input class="d-none" type="text" id="productId" name="productId" value=<%= p.product._id %>>
                         <button type="submit" class="btn btn-sm btn-outline-secondary"> - </button>
                       </form>
                       <form action="cart/insert" method="post">
-                        <input class="d-none" type="text" id="products" name="products" value=<%= p.product._id %>>
+                        <input class="d-none" type="text" id="productId" name="productId" value=<%= p.product._id %>>
                         <button type="submit" class="btn btn-sm btn-outline-secondary">+</button>
                       </form>
                     </div>
