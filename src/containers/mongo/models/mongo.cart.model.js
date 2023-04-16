@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
-const productModel = require('./product.model');
-const userModel = require('./user.model');
+const productModel = require('./mongo.product.model');
+const userModel = require('./mongo.user.model');
 
 const cartSchema = new Schema({
     uuid: {

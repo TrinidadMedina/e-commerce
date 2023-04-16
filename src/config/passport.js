@@ -1,6 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy;
 const md5 = require('md5');
-const UserModel = require('../utils/models/user.model');
+const UserModel = require('../containers/mongo/models/mongo.user.model');
 const {sendMail} = require('../utils/nodemailer')
 
 exports.login = new LocalStrategy(
