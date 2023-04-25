@@ -1,13 +1,12 @@
 const {v4 : uuidv4} = require('uuid');
 const CartDAOFactory = require('../../daos/factory');
 
-const daoType = process.argv[2];
-console.log(daoType)
+const daoType = process.argv[2] || 'mongo'
 
 class CartServices { 
     constructor() {
         const factory = CartDAOFactory.getInstance();
-        this.dao = factory.getCartDAO(daoType); // Obtiene el DAO correspondiente
+        this.dao = factory.getCartDAO(daoType);
         this.products = [
             {"name":"plátano","description":"fruta amarilla","image":"https://cdn4.iconfinder.com/data/icons/fruits-79/48/15-banana-512.png","price":1500,"stock":100},
             {"name":"palta","description":"fruta verde","image":"https://cdn4.iconfinder.com/data/icons/fruits-79/48/20-avocado-512.png","price":4000,"stock":10},
@@ -30,15 +29,15 @@ class CartServices {
         })
     }
 
-    async createCart(userId, productId) {
-        const data = {uuid: uuidv4(), user: userId, products : {product: productId}};
+    async createCart(userEmail, productUuid) {
+        const data = {uuid: uuidv4(), user: userEmail, products: productUuid};
         const newCart = await this.dao.create(data);
         return newCart;
     };
 
-    async getCart(userId) {
-        const carts = await this.dao.getCart(userId);
-        return carts;
+    async getCart(userEmail) {
+        const cart = await this.dao.getCart(userEmail);
+        return cart;
     };
 
     async createProduct(data) {
@@ -52,27 +51,20 @@ class CartServices {
         return products;
       };
 
-    async insertProduct(userId, productId) {
-        const cart = await this.dao.insertProduct(userId, productId);
+    async insertProduct(userEmail, productUuid) {
+        const cart = await this.dao.insertProduct(userEmail, productUuid);
         return cart;
     };
 
-    async deleteProduct(userId, productId) {
-        const cart = await this.dao.deleteProduct(userId, productId);
+    async deleteProduct(userEmail, productUuid) {
+        const cart = await this.dao.deleteProduct(userEmail, productUuid);
         return cart;
     };
 
-    async deleteCart(userId) {
-        const cart = await this.dao.delete(userId);
+    async deleteCart(userEmail) {
+        const cart = await this.dao.delete(userEmail);
         return cart;
     };
-
-    static getInstance() {
-        if(!instance){
-            instance = new CartServices();
-        }
-        return instance;
-    }
 };
 
 module.exports = new CartServices();

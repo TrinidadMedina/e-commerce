@@ -1,7 +1,8 @@
 const LocalStrategy = require('passport-local').Strategy;
 const md5 = require('md5');
-const UserModel = require('../containers/mongo/models/mongo.user.model');
-const {sendMail} = require('../utils/nodemailer')
+const UserModel = require('../../containers/mongo/models/mongo.user.model');
+const {sendMail} = require('../../utils/nodemailer');
+const UserDTO = require('../../dtos/user.dto');
 
 exports.login = new LocalStrategy(
     {
@@ -9,15 +10,23 @@ exports.login = new LocalStrategy(
         passwordField: 'password'
     },
     async (email, password, done) => {
-        const userMail = await UserModel.findOne({email:email});
-        if(!userMail){
+        const userEmail = await UserModel.findOne({email:email});
+        if(!userEmail){
             return done(null, false, {message: 'Usuario no encontrado'});
         }
         const userPass = await UserModel.findOne({password: md5(password)});
         if(!userPass){
             return done(null, false, {message: 'Contraseña incorrecta'});
         }
-        done(null, userMail)
+        const userDTO = new UserDTO(
+            userEmail.email, 
+            userEmail.username, 
+            userEmail.address, 
+            userEmail.age, 
+            userEmail.number, 
+            userEmail.image
+        )
+        done(null, userDTO)
     })
 
 exports.signup = new LocalStrategy(
@@ -42,7 +51,15 @@ exports.signup = new LocalStrategy(
             image: rutaImagen
         });
         const newUser = await stageUser.save();
-        done(null, newUser);
-        sendMail('nuevo registro', JSON.stringify(newUser));   
+        const userDTO = new UserDTO(
+            newUser.email, 
+            newUser.username, 
+            newUser.address, 
+            newUser.age, 
+            newUser.number, 
+            newUser.image
+        )
+        done(null, userDTO);
+        sendMail('nuevo registro', JSON.stringify(userDTO));   
     }
 );

@@ -14,7 +14,7 @@ exports.sendMessage = async (number, body) => {
             to: number
         });
     }catch(err) {
-        throw new Error(err.message);
+        throw new Error(err);
     }
 };
 

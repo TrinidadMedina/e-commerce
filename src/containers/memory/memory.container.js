@@ -2,6 +2,7 @@ const _ = require('lodash');
 const CartDAO = require('../../daos/cart.dao');
 const CartModel = require('./models/memory.cart.model');
 const ProductModel = require('./models/memory.product.model');
+const ProductDTO = require('../../dtos/product.dto')
 
 class MemoryCartDAO extends CartDAO {
   constructor() {
@@ -13,7 +14,7 @@ class MemoryCartDAO extends CartDAO {
   async create(data) {
     try{
       let cart = null;
-      const product = this.products.find(product => product._id == data.products.product);
+      const product = this.products.find(product => product.uuid == data.products);
       if(this.carts.length !== 0){
         cart = this.carts.find(cart => cart.user.toString() == data.user.toString());
       }
@@ -23,25 +24,43 @@ class MemoryCartDAO extends CartDAO {
         this.carts.push(newCart);
         return
       }
-      if(cart.products.includes(product)){
-        console.log('producto ya existe en el carro');
-        return
+
+      for(let i = 0; i < cart.products.length; i++){
+        if(cart.products[i].product.uuid == data.products){
+          return 'producto ya existe en el carro'; 
+        }
       }
       const index = this.carts.findIndex(cart => cart.user.toString() == data.user.toString());
       cart.products.push({product, quant: 1})
       this.carts.splice(index, 1, cart);
       return;
     }catch(err){
-      throw new Error(err.message);
+      throw new Error(err);
     }
   }
 
-  async getCart(userId) {
+  async getCart(userEmail) {
     try{
-      const cart = this.carts.find((cart) => cart.user.toString() === userId.toString());
-      return cart;
+      const cart = this.carts.find((cart) => cart.user.toString() === userEmail.toString());
+      if(_.isNil(cart)){
+        return cart
+      }
+      const products = cart.products.map(product => {
+        const productData = product.product;
+        const productDTO = new ProductDTO(
+            productData.uuid,
+            productData.name,
+            productData.description,
+            productData.image,
+            productData.price,
+            product.quant
+        );
+        return productDTO;
+      });
+      const cartDTO = {products};
+      return cartDTO
     }catch(err){
-      throw new Error(err.message)
+      throw new Error(err)
     }
   }
 
@@ -54,16 +73,16 @@ class MemoryCartDAO extends CartDAO {
     try{
       return this.products;
     }catch(err){
-      throw new Error(err.message)
+      throw new Error(err)
     }
   }
 
-  async insertProduct(userId, productId) {
+  async insertProduct(userEmail, productUuid) {
     try{
       this.carts = this.carts.map(cart => {
-        if(cart.user.toString() == userId.toString()){
+        if(cart.user.toString() == userEmail.toString()){
           cart.products.map(product => {
-            if(product.product._id.toString() == productId.toString()){
+            if(product.product.uuid.toString() == productUuid.toString()){
               product.quant++;
             }
             return product;
@@ -72,15 +91,15 @@ class MemoryCartDAO extends CartDAO {
         return cart;
       });
     }catch(err){
-      throw new Error(err.message)
+      throw new Error(err)
     }
   }
-  async deleteProduct(userId, productId) {
+  async deleteProduct(userEmail, productUuid) {
     try{
       this.carts = this.carts.map(cart => {
-        if(cart.user.toString() == userId.toString()){
+        if(cart.user.toString() == userEmail.toString()){
           cart.products.map((product, index) => {
-            if(product.product._id.toString() == productId.toString()){
+            if(product.product.uuid.toString() == productUuid.toString()){
               if(product.quant == 1){
                 cart.products.splice(index, 1);
               }else{
@@ -94,16 +113,16 @@ class MemoryCartDAO extends CartDAO {
       });
 
     }catch(err){
-      throw new Error(err.message)
+      throw new Error(err)
     }
   }
-  async delete(userId) {
+  async delete(userEmail) {
     try{
-      const index = this.carts.findIndex(cart => cart.user.toString() == userId.toString());
+      const index = this.carts.findIndex(cart => cart.user.toString() == userEmail.toString());
       this.carts.splice(index, 1);
       return
     }catch(err){
-      throw new Error(err.message)
+      throw new Error(err)
     }
   }
 

@@ -1,7 +1,9 @@
 const _ = require('lodash');
 const CartDAO = require('../../daos/cart.dao');
 const cartModel = require('./models/mongo.cart.model');
-const productModel = require('./models/mongo.product.model')
+const productModel = require('./models/mongo.product.model');
+const userModel = require('./models/mongo.user.model');
+const ProductDTO = require('../../dtos/product.dto')
 
 class MongoCartDAO extends CartDAO {
     constructor() {
@@ -10,20 +12,23 @@ class MongoCartDAO extends CartDAO {
   
     async create(data) {
         try{
-            const cart = await cartModel.findOne({user: data.user});
+            const user = await userModel.findOne({email: data.user});
+            const cart = await cartModel.findOne({user: user._id}).populate('products.product');
+            const product = await productModel.findOne({uuid: data.products});
             if(!cart){
+                data.user = user._id;
+                data.products = {product: product._id};
                 return await cartModel.create(data);
             }
-            const prod = cart.products.filter(prod => prod.product == data.products.product);
-
+            const prod = cart.products.filter(prod => prod.product.uuid == data.products);
             if(!_.isEmpty(prod)){
                   return 'Producto ya existe en tu carro'
             }else{
-                await cartModel.updateOne({_id: cart._id}, { $push: {products: { product: data.products.product }} });
+                await cartModel.updateOne({_id: cart._id}, { $push: {products: { product: product._id }} });
                 return
             }
         }catch(err){
-            throw new Error(err.message);
+            throw new Error(err);
         }
     };
   
@@ -35,82 +40,98 @@ class MongoCartDAO extends CartDAO {
             }
             return await productModel.create(data);
         }catch(err){
-            throw new Error(err.message)
+            throw new Error(err)
         }
     } */
 
-    async getCart(userId) {
+    async getCart(userEmail) {
         try{
-            const cart = await cartModel.findOne({user: userId}).populate('products.product');
+            const user = await userModel.findOne({email: userEmail});
+            const cart = await cartModel.findOne({user: user._id}).populate('products.product');
             if (!cart){
-                throw new Error(cart);
+                return cart;
             }
-            return cart
+            const products = cart.products.map(product => {
+                const productData = product.product;
+                const productDTO = new ProductDTO(
+                    productData.uuid,
+                    productData.name,
+                    productData.description,
+                    productData.image,
+                    productData.price,
+                    product.quant
+                );
+                return productDTO;
+            });
+            const cartDTO = {products};
+            return cartDTO
         }catch(err){
-            throw new Error(err.message);
+            throw new Error(err);
         }   
     };
 
     async getProducts() {
         try{
             const products = await productModel.find();
-            return products
+            const productsDTO = products.map(product => {
+                const productDTO = new ProductDTO(
+                    product.uuid,
+                    product.name,
+                    product.description,
+                    product.image,
+                    product.price
+                );
+                return productDTO;
+            });
+            return productsDTO
         }catch(err){
-            throw new Error(err.message);
+            throw new Error(err);
         }   
     };
 
-    async delete(userId) {
+    async delete(userEmail) {
         try{
-            let data = await cartModel.deleteOne({user: userId});
+            const user = await userModel.findOne({email: userEmail});
+            await cartModel.deleteOne({user: user._id});
             return
         }catch(err){
-            throw new Error(err.message);
+            throw new Error(err);
         }
     };
 
-    async insertProduct(userId, productId) {
+    async insertProduct(userEmail, productUuid) {
         try{ 
-            const cart = await cartModel.findOne({user: userId});
-            console.log(productId)
-            const prod = cart.products.filter(prod => prod.product == productId);
-            console.log(prod)
-            const updated = await cartModel.findOneAndUpdate(
-                { _id: cart._id, "products._id": prod[0]._id }, // criterio de búsqueda
-                { $set: { "products.$.quant": prod[0].quant+1 } }, // actualización
+            const user = await userModel.findOne({email: userEmail});
+            const cart = await cartModel.findOne({user: user._id}).populate('products.product');
+            const prod = cart.products.filter(prod => prod.product.uuid == productUuid);
+            await cartModel.findOneAndUpdate(
+                { _id: cart._id, "products._id": prod[0]._id }, 
+                { $set: { "products.$.quant": prod[0].quant+1 } }
             );
             return 'Producto agregado'
         }catch(err){
-            throw new Error(err.message)
+            throw new Error(err)
         }
     };
 
-    async deleteProduct(userId, productId) {
+    async deleteProduct(userEmail, productUuid) {
         try{
-            const cart = await cartModel.findOne({user: userId});
-            const prod = cart.products.filter(prod => prod.product == productId);
+            const user = await userModel.findOne({email: userEmail});
+            const cart = await cartModel.findOne({user: user._id}).populate('products.product');
+            const prod = cart.products.filter(prod => prod.product.uuid == productUuid);
             if(prod[0].quant == 1){
-                const updated = await cartModel.updateOne({_id: cart._id}, { $pull: {products: { product: productId }} });
+                await cartModel.updateOne({_id: cart._id}, { $pull: {products: { product: prod[0].product}} });
                 return
             }
-            const updated = await cartModel.findOneAndUpdate(
-                { _id: cart._id, "products._id": prod[0]._id }, // criterio de búsqueda
-                { $set: { "products.$.quant": prod[0].quant-1 } }, // actualización
-                { new: true } // opción para devolver el documento actualizado
+            await cartModel.findOneAndUpdate(
+                { _id: cart._id, "products._id": prod[0]._id }, 
+                { $set: { "products.$.quant": prod[0].quant-1 } }
             );
-            
             return 'Producto eliminado'
         }catch(err){
-            throw new Error(err.message);
+            throw new Error(err);
         }
     };
-
-    static getInstance() {
-        if(!instance){
-            instance = new MongoContainer();
-        }
-        return instance;
-    }
 }
 
 module.exports = MongoCartDAO;

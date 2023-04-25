@@ -9,7 +9,7 @@ const mongooseConnect = () => {
     mongoose.connect(MONGO_URI, getMongoConfig()).then(() => {
         loggerConsole.info('Mongoose connection ok');
     }).catch(err => {
-        loggerFile.error(err.message)
+        loggerFile.error(err)
         process.exit();
     })    
 };
