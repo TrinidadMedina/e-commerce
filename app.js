@@ -6,7 +6,7 @@ const compression = require('compression');
 const flash = require('connect-flash');
 const mongooseConnect = require('./src/utils/connect-mongo');
 const indexRouter = require('./src/routes/index');
-const {login, signup} = require('./src/config/passport');
+const {login, signup} = require('./src/services/user/user.services');
 const {session} = require('./src/utils/connect-session');
 const UserModel = require('./src/containers/mongo/models/mongo.user.model');
 const errorMiddleware = require('./src/middlewares/error.middleware');
@@ -40,11 +40,12 @@ passport.use('login', login);
 passport.use('signup', signup);
 
 passport.serializeUser((user, done) => {
-    done(null, user._id);
+    console.log(user)
+    done(null, user.email);
 });
 
-passport.deserializeUser(async (id, done) => {
-    const userData = await UserModel.findById(id);
+passport.deserializeUser(async (email, done) => {
+    const userData = await UserModel.findOne({email: email});
     done(null, userData);
 });
 

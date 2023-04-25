@@ -37,25 +37,6 @@
           </li>
         </ul>
       </div>
-
-      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title" id="myModalLabel">¡Bienvenido!</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <p>Este es mi popup.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-            </div>
-          </div>
-        </div>
-      </div>
     </nav>
 	</header>
   <main>
@@ -73,10 +54,10 @@
               </div>
             <% } else { %>
               <tr>
-                <td><img class="img-fluid" style='width: 50px' src= <%= p.product.image %> ></td>
+                <td><img class="img-fluid" style='width: 50px' src= <%= p.image %> ></td>
                 <td style="line-height: 0.5;">
-                  <p ><%= p.product.name %></p>
-                  <p >$<%= p.product.price %></p>
+                  <p ><%= p.name %></p>
+                  <p >$<%= p.price %></p>
                 </td>
                 <td>
                   <p ><%= p.quant %></p>
@@ -85,11 +66,11 @@
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <form action="/cart/delete" method="post">
-                        <input class="d-none" type="text" id="productId" name="productId" value=<%= p.product._id %>>
+                        <input class="d-none" type="text" id="productId" name="productUuid" value=<%= p.uuid %>>
                         <button type="submit" class="btn btn-sm btn-outline-secondary"> - </button>
                       </form>
                       <form action="cart/insert" method="post">
-                        <input class="d-none" type="text" id="productId" name="productId" value=<%= p.product._id %>>
+                        <input class="d-none" type="text" id="productId" name="productUuid" value=<%= p.uuid %>>
                         <button type="submit" class="btn btn-sm btn-outline-secondary">+</button>
                       </form>
                     </div>

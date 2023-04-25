@@ -19,7 +19,7 @@ router
 .get('/cart', authMiddleware, getCart)
 .get('/user-info', authMiddleware, getUserInfo)
 .get('/auth-error', getAuthError)
-.get('/error', getError)
-.get('/success', getSuccess);
+.get('/error', authMiddleware, getError)
+.get('/success', authMiddleware, getSuccess);
 
 module.exports = router;

@@ -36,7 +36,7 @@ exports.getHome = async (req, res, next) => {
 exports.getCart = async (req, res, next) => {
     try{
         const userData = req.user;
-        const data = await cartServices.getCart(userData._id);
+        const data = await cartServices.getCart(userData.email);
         res.render('cart', {options: data, userData});
     }catch(err){
         next(err);
@@ -70,10 +70,10 @@ exports.getAuthError = async (req, res, next) => {
     }
 }
 
-exports.getError = async (req, res, next) => {
+exports.getError = async (_req, res, next) => {
     try{
         res.render('error', {message: 'error'});
     }catch(err){
-        next(err.message)
+        next(err)
     }
 }

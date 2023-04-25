@@ -20,7 +20,7 @@ exports.sendMail = async (subject, html) => {
     try {
         await transporter.sendMail(mailOptions)
      } catch (err) {
-        throw new Error(err.message)
+        throw new Error(err)
      }
 }
 
