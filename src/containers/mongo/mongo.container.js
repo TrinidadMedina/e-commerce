@@ -18,14 +18,15 @@ class MongoCartDAO extends CartDAO {
             if(!cart){
                 data.user = user._id;
                 data.products = {product: product._id};
-                return await cartModel.create(data);
+                await cartModel.create(data);
+                return 'Producto agregado'
             }
             const prod = cart.products.filter(prod => prod.product.uuid == data.products);
             if(!_.isEmpty(prod)){
                   return 'Producto ya existe en tu carro'
             }else{
                 await cartModel.updateOne({_id: cart._id}, { $push: {products: { product: product._id }} });
-                return
+                return 'Producto agregado'
             }
         }catch(err){
             throw new Error(err);
@@ -93,7 +94,7 @@ class MongoCartDAO extends CartDAO {
         try{
             const user = await userModel.findOne({email: userEmail});
             await cartModel.deleteOne({user: user._id});
-            return
+            return 
         }catch(err){
             throw new Error(err);
         }
@@ -108,7 +109,7 @@ class MongoCartDAO extends CartDAO {
                 { _id: cart._id, "products._id": prod[0]._id }, 
                 { $set: { "products.$.quant": prod[0].quant+1 } }
             );
-            return 'Producto agregado'
+            return
         }catch(err){
             throw new Error(err)
         }
@@ -127,7 +128,7 @@ class MongoCartDAO extends CartDAO {
                 { _id: cart._id, "products._id": prod[0]._id }, 
                 { $set: { "products.$.quant": prod[0].quant-1 } }
             );
-            return 'Producto eliminado'
+            return 
         }catch(err){
             throw new Error(err);
         }

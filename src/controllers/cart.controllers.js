@@ -7,8 +7,9 @@ exports.createCart =  async (req, res, next)=>{
     try{
         const {email} = req.user; 
         const {productUuid} = req.body; 
-        await cartServices.createCart(email, productUuid);
-        res.redirect('/home');
+        const result = await cartServices.createCart(email, productUuid);
+        const productsData = await cartServices.getProducts();
+        return res.render('home', {options: productsData, error: result, userData : req.user })
     }catch(err){
         next(err);
     } 
@@ -41,7 +42,8 @@ exports.insertProduct = async (req, res, next) => {
         const {productUuid} = req.body;  
         const {email} = req.user; 
         await cartServices.insertProduct(email, productUuid);
-        res.redirect('/cart')
+        const data = await cartServices.getCart(email);
+        return res.render('cart', { options: data, error: null, userData: req.user});
     }catch(err){
         next(err);
     }
@@ -52,7 +54,8 @@ exports.deleteProduct = async (req, res, next)=>{
         const {productUuid} = req.body;  
         const {email} = req.user; 
         await cartServices.deleteProduct(email, productUuid);
-        res.redirect('/cart')  
+        const data = await cartServices.getCart(email);
+        return res.render('cart', { options: data, error: null, userData: req.user});
     }catch(err){
         next(err);
     } 
@@ -66,12 +69,13 @@ exports.buyCart =  async (req, res, next)=>{
         const listProduct = cart.products.map(prod => {
            return {name: prod.name, price: prod.price, quantity: prod.quant, total: prod.price*prod.quant}
         })
-        const finalData = {name: userData.username, email: userData.email, number: userData.number, products: listProduct}
+        const finalData = {name: userData.username, email: userData.email, number: userData.number, address: userData.address, products: listProduct}
         await sendMail(`nuevo pedido de ${finalData.name}, ${finalData.email}`, JSON.stringify(finalData));
         await sendMessage(`whatsapp:+56${adminNumber}`, JSON.stringify(finalData));
         await sendMessage(`+56${finalData.number}`, 'su pedido ha sido recibido y se encuentra en proceso');
         await cartServices.deleteCart(userData.email);
-        res.redirect('/success')
+        const productsData = await cartServices.getProducts();
+        return res.render('home', {options: productsData, error: 'Tu orden fue recibida con éxito', userData })
     }catch(err){
         next(err);
     } 

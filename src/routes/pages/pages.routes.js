@@ -7,7 +7,6 @@ const {
     getHome,
     getCart,
     getUserInfo,
-    getAuthError,
     getError,
     getSuccess
 } = require ('../../controllers/pages.controllers');
@@ -18,7 +17,6 @@ router
 .get('/home', authMiddleware, getHome)
 .get('/cart', authMiddleware, getCart)
 .get('/user-info', authMiddleware, getUserInfo)
-.get('/auth-error', getAuthError)
 .get('/error', authMiddleware, getError)
 .get('/success', authMiddleware, getSuccess);
 

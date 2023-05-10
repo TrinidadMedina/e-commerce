@@ -27,7 +27,7 @@ class MemoryCartDAO extends CartDAO {
 
       for(let i = 0; i < cart.products.length; i++){
         if(cart.products[i].product.uuid == data.products){
-          return 'producto ya existe en el carro'; 
+          return 'Producto ya existe en tu carro'
         }
       }
       const index = this.carts.findIndex(cart => cart.user.toString() == data.user.toString());

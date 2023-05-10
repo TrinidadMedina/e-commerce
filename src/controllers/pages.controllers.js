@@ -5,7 +5,11 @@ exports.getLogin = async (req, res, next) => {
         if(req.isAuthenticated()){
             return res.redirect('/home')
         }
-        res.render('signin');
+        const message = req.flash('error')[0];
+        if (message) {
+            throw new Error(message)
+        }
+        res.render('signin', { error: null });
     }catch(err){
         next(err);
     }
@@ -16,7 +20,11 @@ exports.getSignup = async (req, res, next) => {
         if(req.isAuthenticated()){
             return res.redirect('/home')
         }
-        res.render('signup');
+        const message = req.flash('error')[0];
+        if (message) {
+            throw new Error(message)
+        }
+        res.render('signup', { error: null });
     }catch(err){
         next(err);
     }
@@ -26,7 +34,7 @@ exports.getHome = async (req, res, next) => {
     try{
         const userData = req.user;
         const data = await cartServices.getProducts();
-        res.render('home', {options: data, userData});
+        res.render('home', {options: data, userData, error: null});
 
     }catch(err){
         next(err);
@@ -37,7 +45,7 @@ exports.getCart = async (req, res, next) => {
     try{
         const userData = req.user;
         const data = await cartServices.getCart(userData.email);
-        res.render('cart', {options: data, userData});
+        res.render('cart', {options: data, userData, error: null});
     }catch(err){
         next(err);
     }
@@ -46,7 +54,7 @@ exports.getCart = async (req, res, next) => {
 exports.getUserInfo = async (req, res, next) => {
     try{
         const userData = req.user;
-        res.render('user-info', {userData});
+        res.render('user-info', {userData, error: null});
     }catch(err){
         next(err);
     }
@@ -55,16 +63,7 @@ exports.getUserInfo = async (req, res, next) => {
 exports.getSuccess = async (req, res, next) => {
     try{
         const userData = req.user;
-        res.render('success',  {userData});
-    }catch(err){
-        next(err);
-    }
-}
-
-exports.getAuthError = async (req, res, next) => {
-    try{
-        const message = req.flash('error')[0];
-        res.render('auth-error', {message});
+        res.render('success',  {userData, error: null});
     }catch(err){
         next(err);
     }
@@ -72,7 +71,7 @@ exports.getAuthError = async (req, res, next) => {
 
 exports.getError = async (_req, res, next) => {
     try{
-        res.render('error', {message: 'error'});
+        res.render('error', {error: 'error'});
     }catch(err){
         next(err)
     }
