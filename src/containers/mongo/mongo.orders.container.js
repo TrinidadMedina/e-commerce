@@ -42,7 +42,6 @@ class OrdersContainer{
             .populate('user')
             .populate('products.product')
 
-            console.log(order)
             if(!order){
                 return null
             }
