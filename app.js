@@ -5,6 +5,7 @@ const passport = require('passport');
 const compression = require('compression');
 const flash = require('connect-flash');
 const cors = require("cors");
+const path = require('path')
 const mongooseConnect = require('./src/utils/connect-mongo');
 const indexRouter = require('./src/routes/index');
 const {login, signup} = require('./src/services/user/user.services');
@@ -37,7 +38,7 @@ app.use(cookieParser(COOKIES_SECRET));
 
 app.use(session);
 
-app.set('views', './src/views');
+app.set('views', path.join(__dirname, 'src', 'views'));
 app.set('view engine', 'ejs');
 
 passport.use('login', login);
