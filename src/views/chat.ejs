@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tienda</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.socket.io/4.3.1/socket.io.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const socket = io();
+      const formPublicarMensaje = document.getElementById('formPublicarMensaje')
+      formPublicarMensaje.addEventListener('submit', e => {
+          e.preventDefault()
+          const message = {
+              email: '<%= userData.email %>',
+              text: formPublicarMensaje[0].value,
+          }
+          socket.emit('mensajeCliente', message);
+          formPublicarMensaje.reset()
+      })
+
+      const updateMessages = (messages) => {
+          let messagesToList = '';
+          if(messages == null){
+              messagesToList = '<ol> Aún no hay mensajes :) <ol>'
+          }else{
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            messages.forEach(i => {
+                const date = new Date(i.timestamp);
+                const dateFormatted = date.toLocaleDateString(undefined, options);
+                const time = date.toLocaleTimeString();
+                messagesToList = messagesToList + `<ol> <span style="font-weight: bold">${i.user.username} </span> <span class= "text-secondary" style="font-size: 12px">[${dateFormatted} - ${time}]</span>: <span class="font-italic">${i.text}<span></ol>`
+            })
+          }
+          document.querySelector('#messagesList').innerHTML = messagesToList;
+      } 
+
+      socket.on('mensajeServidor', data => {
+          updateMessages(data)
+      })
+
+      socket.on('updatedMessages', messagesArray => {
+          updateMessages(messagesArray);
+      })
+    });
+  </script>
+</head>
+<body>
+  <% if (error) { %>
+    <script>
+    Swal.fire({
+        text: '<%= error %>',
+    })
+    </script>
+  <% } %>
+	<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="/">
+        <img src="https://cdn1.iconfinder.com/data/icons/supermarket-20/64/supermarket-grocery-store-food-512.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        la tienda
+      </a>
+      <h3 class="nav-link active mx-auto">Chat general</h3>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Catálogo</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/cart">Carrito</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/chat">Chat</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <div style="  width: 40px; height: 40px; border-radius: 50%; overflow: hidden;">
+                <img src=<%= userData.image %> style="  width: 100%; height: 100%; object-fit: cover;" alt="Imagen de usuario">
+              </div>
+            </a>
+            <div class="dropdown-menu" style="right: 0; left: auto;" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/user-info">Información</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/orders">Mis órdenes</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/signout">Salir</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+	</header>
+	<main>
+    <div class="d-flex justify-content-center align-items-center" style="margin:20px" id="chatBox">
+      <form id="formPublicarMensaje" autocomplete="off">
+        <input id="inputMensaje" type="text"  placeholder="Ingresa un mensaje..." require>
+        <button id="btnEnviar" type="submit">Enviar!</button>
+      </form>
+      <br>
+      <br>
+      <ul id="messagesList">
+
+      </ul>
+    </div>
+  </main>
+
+  <footer class="text-muted footer fixed-bottom" style="background-color: #eee">
+    <div class="container">
+      <p class="float-right">
+        <a href="#">Back to top</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
