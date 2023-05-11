@@ -5,6 +5,7 @@ const ordersServices = require('../services/orders/orders.services')
 const errorMiddleware = async (err, req, res, _next) => {
     const userData = req.user; 
     //loggerConsole.error(err);
+    console.error(err)
     switch (req.path) {
         case '/':
             return res.render('signin', { error: err.message })

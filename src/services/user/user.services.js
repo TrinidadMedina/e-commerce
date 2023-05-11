@@ -40,7 +40,7 @@ exports.signup = new LocalStrategy(
         if(userData){
             return done(null, false,  {message: 'Usuario ya existe'});
         }
-        const rutaImagen = '/images/' + req.file.filename;
+        //const rutaImagen = '/images/' + req.file.filename;
         const stageUser = new UserModel({
             email: req.body.email,
             password: md5(password),
@@ -48,7 +48,8 @@ exports.signup = new LocalStrategy(
             address: req.body.address,
             age: req.body.age,
             number: req.body.number,
-            image: rutaImagen
+            //image: rutaImagen
+            image: req.body.image
         });
         const newUser = await stageUser.save();
         const userDTO = new UserDTO(

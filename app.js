@@ -22,8 +22,8 @@ const COOKIES_SECRET = process.env.COOKIES_SECRET || 'default';
 
 app.use(compression());
 
-app.use(express.static('public'));
-app.use('/images', express.static('public/images'));
+/* app.use(express.static('public'));
+app.use('/images', express.static('public/images')); */
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
