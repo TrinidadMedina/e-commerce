@@ -54,8 +54,8 @@
 	</header>
 
   <main>
-    <div class="d-flex-col justify-content-between align-items-center mx-5 mt-3">
-      <h4 class="m-10">Orden N° <%= options.number %></h4>
+    <div class="mx-auto mt-5" style="width: 500px;">
+      <h4 class="">Orden N° <%= options.number %></h4>
       <p><%= options.date %></p>
     </div>
     <table class="table mx-auto mt-5" style="width: 500px;">
@@ -70,8 +70,17 @@
                 <td>
                   <p >x <%= p.quant %></p>
                 </td>
+                <td>
+                  <p >$ <%= p.total %></p>
+                </td>
               </tr>
           <% }) %>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>Total: </td>
+            <td>$ <%= options.total %></td>
+          </tr>
       </tbody>
     </table>
   </main>

@@ -17,11 +17,17 @@ const orderSchema = new Schema({
         quant: {
             type: Number ,
             default: 1
-        }       
+        },
+        total: {
+            type: Number
+        }     
     }],
     status: {
         type: String,
         default: 'generada'
+    },
+    total: {
+        type: Number,
     },
     timestamp: {
         type: Date,

@@ -64,12 +64,13 @@
                 <div class="card-body">
                   <div class="d-flex-col justify-content-between align-items-center mb-4">
                     <h4 class="card-text"><%= i.number %></h4>
-                    <p class="card-text"><%= i.date %></p>
+                    <p class="card-text" style="font-size: 12px"><%= i.date %></p>
                   </div>
                   <% i.products.forEach(p=>{ %>
                     <img class="img-fluid p-1" style='width: 50px' src= <%= p.product.image %> >
                   <% }) %>
                   <div class="d-flex justify-content-between align-items-center mt-4">
+                    <span>Total: $ <%= i.total %></span>
                     <div class="btn-group">
                       <form action="/one-order" method="get">
                         <input class="d-none" type="text" name="orderNumber" value=<%= i.number %>>
