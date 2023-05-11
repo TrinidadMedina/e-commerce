@@ -70,7 +70,7 @@ exports.buyCart =  async (req, res, next)=>{
         const finalData = {name: userData.username, email: userData.email, number: userData.number, address: userData.address, products: listProduct}
         await sendMail(`nuevo pedido de ${finalData.name}, ${finalData.email}`, JSON.stringify(finalData));
         await sendMessage(`whatsapp:+56${adminNumber}`, JSON.stringify(finalData));
-        await sendMessage(`+56${finalData.number}`, 'su pedido ha sido recibido y se encuentra en proceso');
+        await sendMessage(`+56${adminNumber}`, 'su pedido ha sido recibido y se encuentra en proceso');
         await ordersServices.createOrder(userData.email);
         await cartServices.deleteCart(userData.email);
         const productsData = await cartServices.getProducts();
