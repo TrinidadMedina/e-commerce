@@ -24,7 +24,7 @@ const cartSchema = new Schema({
     }],
     timestamp: {
         type: Date,
-        default: () => Date.now() / 1000,
+        default: () => Date.now()
     }
 });
 

@@ -19,6 +19,10 @@ const errorMiddleware = async (err, req, res, _next) => {
             return res.render('cart', { options: data, error: err.message, userData })
         case '/user-info':
             return res.render('user-info', { error: err.message, userData })
+        case '/orders':
+            return res.render('orders', { error: err.message, userData })
+        case '/chat':
+            return res.render('chat', { error: err.message, userData })
         default:
             return res.render('error', { error: err.message, userData })
     }
