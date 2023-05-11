@@ -11,7 +11,7 @@ const {session} = require('./src/utils/connect-session');
 const UserModel = require('./src/containers/mongo/models/mongo.user.model');
 const errorMiddleware = require('./src/middlewares/error.middleware');
 const messagesServices = require('./src/services/messages/messages-services');
-const loggerConsole = require('./src/utils/log4js').loggerConsole;
+//const loggerConsole = require('./src/utils/log4js').loggerConsole;
 require('dotenv').config();
 
 const app = express();
@@ -60,7 +60,7 @@ app.use(indexRouter);
 app.use(errorMiddleware);
 
 io.on('connection', async socket =>{
-    loggerConsole.info(`Nuevo cliente conectado: ${socket.id}`);
+    //loggerConsole.info(`Nuevo cliente conectado: ${socket.id}`);
     const messagesHistory = await messagesServices.getMessages();
     socket.emit('updatedMessages', messagesHistory);
     socket.on('mensajeCliente', async data => {

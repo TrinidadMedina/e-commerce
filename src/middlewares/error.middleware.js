@@ -1,10 +1,10 @@
-const loggerConsole = require('../utils/log4js').loggerConsole;
+//const loggerConsole = require('../utils/log4js').loggerConsole;
 const cartServices = require('../services/cart/cart.services');
 const ordersServices = require('../services/orders/orders.services')
 
 const errorMiddleware = async (err, req, res, _next) => {
     const userData = req.user; 
-    loggerConsole.error(err);
+    //loggerConsole.error(err);
     switch (req.path) {
         case '/':
             return res.render('signin', { error: err.message })
