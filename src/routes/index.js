@@ -13,6 +13,6 @@ router.get('/health', (_req, res) => {
 .use(pagesRouter)
 .use(sessionRouter)
 .use('/cart', cartRouter)
-.use('/info', infoRouter);
+.use('/info', infoRouter)
 
 module.exports = router;

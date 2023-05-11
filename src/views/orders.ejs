@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>tienda</title>
+	<title>Tienda</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -19,7 +19,7 @@
         <img src="https://cdn1.iconfinder.com/data/icons/supermarket-20/64/supermarket-grocery-store-food-512.png" width="30" height="30" class="d-inline-block align-top" alt="">
         la tienda
       </a>
-      <h3 class="nav-link active mx-auto">Error</h3>
+      <h3 class="nav-link active mx-auto">Mis órdenes</h3>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -30,9 +30,6 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/cart">Carrito</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/orders">Órdenes</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/chat">Chat</a>
@@ -55,11 +52,14 @@
       </div>
     </nav>
 	</header>
-  <main>
-    <div class="mx-auto" style="width: 500px;">
-        <h4>ERROR: <%= error %></h4>
-    </div>
-</main>
+	<main>
+    <p>Ordenes</p>
+    <table class="table mx-auto mt-5" style="width: 500px;">
+        <tbody>
+        </tbody>
+      </table>
+  </main>
+
   <footer class="text-muted footer fixed-bottom" style="background-color: #eee">
     <div class="container">
       <p class="float-right">

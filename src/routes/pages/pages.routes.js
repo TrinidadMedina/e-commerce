@@ -8,7 +8,8 @@ const {
     getCart,
     getUserInfo,
     getError,
-    getSuccess
+    getOrders,
+    getChat
 } = require ('../../controllers/pages.controllers');
 
 router
@@ -18,6 +19,7 @@ router
 .get('/cart', authMiddleware, getCart)
 .get('/user-info', authMiddleware, getUserInfo)
 .get('/error', authMiddleware, getError)
-.get('/success', authMiddleware, getSuccess);
+.get('/orders', authMiddleware, getOrders)
+.get('/chat', authMiddleware, getChat)
 
 module.exports = router;

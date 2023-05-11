@@ -58,16 +58,7 @@ exports.getUserInfo = async (req, res, next) => {
     }catch(err){
         next(err);
     }
-}
-
-exports.getSuccess = async (req, res, next) => {
-    try{
-        const userData = req.user;
-        res.render('success',  {userData, error: null});
-    }catch(err){
-        next(err);
-    }
-}
+};
 
 exports.getError = async (_req, res, next) => {
     try{
@@ -75,4 +66,22 @@ exports.getError = async (_req, res, next) => {
     }catch(err){
         next(err)
     }
-}
+};
+
+exports.getOrders = async (req, res, next) => {
+    try{
+        const userData = req.user;
+        res.render('orders', {userData, error: null});
+    }catch(err){
+        next(err);
+    }
+};
+
+exports.getChat = async (req, res, next) => {
+    try{
+        const userData = req.user;
+        res.render('chat', {userData, error: null});
+    }catch(err){
+        next(err);
+    }
+};
