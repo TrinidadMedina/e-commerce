@@ -1,4 +1,5 @@
 const cartServices = require('../services/cart/cart.services');
+const ordersServices = require('../services/orders/orders.services')
 
 exports.getLogin = async (req, res, next) => {
     try{
@@ -71,7 +72,8 @@ exports.getError = async (_req, res, next) => {
 exports.getOrders = async (req, res, next) => {
     try{
         const userData = req.user;
-        res.render('orders', {userData, error: null});
+        const data = await ordersServices.getOrders(userData.email);
+        res.render('orders', {options: data, userData, error: null});
     }catch(err){
         next(err);
     }

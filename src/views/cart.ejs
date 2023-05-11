@@ -55,7 +55,7 @@
   <main>
   <% if(!options){ %>
     <div class="mx-auto" style="width: 500px;">
-      <p >Aún no has agregado productos a tu carro</p>
+      <h4 >Aún no has agregado productos a tu carro</h4>
     </div>
   <% } else { %>
     <table class="table mx-auto mt-5" style="width: 500px;">
@@ -78,11 +78,11 @@
                 <td>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
-                      <form action="/cart/delete" method="post">
+                      <form action="/delete" method="post">
                         <input class="d-none" type="text" id="productId" name="productUuid" value=<%= p.uuid %>>
                         <button type="submit" class="btn btn-sm btn-outline-secondary"> - </button>
                       </form>
-                      <form action="cart/insert" method="post">
+                      <form action="/insert" method="post">
                         <input class="d-none" type="text" id="productId" name="productUuid" value=<%= p.uuid %>>
                         <button type="submit" class="btn btn-sm btn-outline-secondary">+</button>
                       </form>
@@ -95,7 +95,7 @@
       </tbody>
     </table>
 
-    <form action="/cart/buy" method="post">
+    <form action="/buy" method="post">
         <div class="col-sm-8 text-right w-100">
           <button type="submit" class="btn btn-primary text-center">Comprar</button>
         </div>

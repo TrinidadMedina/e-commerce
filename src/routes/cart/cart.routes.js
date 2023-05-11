@@ -9,8 +9,8 @@ const {
 } = require ('../../controllers/cart.controllers');
 
 router
-.post('/', authMiddleware, createCart)
-.post('/', authMiddleware, createProduct)
+.post('/create', authMiddleware, createCart)
+.post('/product', authMiddleware, createProduct)
 .post('/insert', authMiddleware, insertProduct)
 .post('/delete', authMiddleware, deleteProduct)
 .post('/buy', authMiddleware, buyCart)

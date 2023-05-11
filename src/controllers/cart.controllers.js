@@ -1,4 +1,5 @@
 const cartServices = require('../services/cart/cart.services');
+const ordersServices = require('../services/orders/orders.services');
 const _ = require('lodash');
 const {sendMail} = require('../utils/nodemailer');
 const {sendMessage} = require('../utils/twilio');
@@ -24,12 +25,9 @@ exports.createProduct =  async (req, res, next)=>{
                 message: 'Body data missing'
             });
         };
-        if (_.isNil(body.name) || _.isNil(body.description) || _.isNil(body.image) || _.isNil(body.price) || _.isNil(body.stock)){
-            return res.status(400).json({
-                success: false, 
-                message: 'Product atributte missing'
-            });
-        };
+        if(_.every(_.values(req.body), _.isNil)){
+            return res.status(400).json('Faltan parámetros')
+        }
         await cartServices.createProduct(body);
         res.redirect('/home')
     }catch(err){
@@ -73,6 +71,7 @@ exports.buyCart =  async (req, res, next)=>{
         await sendMail(`nuevo pedido de ${finalData.name}, ${finalData.email}`, JSON.stringify(finalData));
         await sendMessage(`whatsapp:+56${adminNumber}`, JSON.stringify(finalData));
         await sendMessage(`+56${finalData.number}`, 'su pedido ha sido recibido y se encuentra en proceso');
+        await ordersServices.createOrder(userData.email);
         await cartServices.deleteCart(userData.email);
         const productsData = await cartServices.getProducts();
         return res.render('home', {options: productsData, error: 'Tu orden fue recibida con éxito', userData })

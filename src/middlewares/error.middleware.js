@@ -1,6 +1,7 @@
 const loggerConsole = require('../utils/log4js').loggerConsole;
 const loggerFile = require('../utils/log4js').loggerFile;
 const cartServices = require('../services/cart/cart.services');
+const ordersServices = require('../services/orders/orders.services')
 
 const errorMiddleware = async (err, req, res, _next) => {
     const userData = req.user; 
@@ -15,12 +16,16 @@ const errorMiddleware = async (err, req, res, _next) => {
             const productsData = await cartServices.getProducts();
             return res.render('home', {options: productsData, error: err.message, userData })
         case '/cart':
-            const data = await cartServices.getCart(userData.email);
-            return res.render('cart', { options: data, error: err.message, userData })
+            const cartData = await cartServices.getCart(userData.email);
+            return res.render('cart', { options: cartData, error: err.message, userData })
         case '/user-info':
             return res.render('user-info', { error: err.message, userData })
         case '/orders':
-            return res.render('orders', { error: err.message, userData })
+            const ordersData = await ordersServices.getOrders(userData.email);
+            return res.render('orders', { options: ordersData, error: err.message, userData })
+        case '/one-order':
+            const data = await ordersServices.getOrder(userData.email);
+            return res.render('orders', { options: data, error: err.message, userData })
         case '/chat':
             return res.render('chat', { error: err.message, userData })
         default:

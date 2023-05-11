@@ -52,12 +52,41 @@
       </div>
     </nav>
 	</header>
-	<main>
-    <p>Ordenes</p>
-    <table class="table mx-auto mt-5" style="width: 500px;">
-        <tbody>
-        </tbody>
-      </table>
+
+  <main>
+    <% if(options){ %>
+    <div class="album py-5 bg-light">
+      <div class="container">
+        <div class="row">
+            <% options.forEach(i=>{ %>
+            <div class="col-md-3">
+              <div class="card mb-3 box-shadow">
+                <div class="card-body">
+                  <div class="d-flex-col justify-content-between align-items-center mb-4">
+                    <h4 class="card-text"><%= i.number %></h4>
+                    <p class="card-text"><%= i.date %></p>
+                  </div>
+                  <% i.products.forEach(p=>{ %>
+                    <img class="img-fluid p-1" style='width: 50px' src= <%= p.product.image %> >
+                  <% }) %>
+                  <div class="d-flex justify-content-between align-items-center mt-4">
+                    <div class="btn-group">
+                      <form action="/one-order" method="get">
+                        <input class="d-none" type="text" name="orderNumber" value=<%= i.number %>>
+                        <button type="submit" class="btn btn-sm btn-outline-secondary">Ver</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% }) %>
+        </div>
+      </div>
+    </div>
+    <% } else {%>
+      <h4 class="mx-auto text-center mt-5">Aún no hay órdenes generadas</h4>
+    <% } %>
   </main>
 
   <footer class="text-muted footer fixed-bottom" style="background-color: #eee">
