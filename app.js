@@ -4,6 +4,7 @@ const logger = require('morgan');
 const passport = require('passport');
 const compression = require('compression');
 const flash = require('connect-flash');
+const cors = require("cors");
 const mongooseConnect = require('./src/utils/connect-mongo');
 const indexRouter = require('./src/routes/index');
 const {login, signup} = require('./src/services/user/user.services');
@@ -21,6 +22,7 @@ const io = require('socket.io')(server);
 const COOKIES_SECRET = process.env.COOKIES_SECRET || 'default';
 
 app.use(compression());
+app.use(cors());
 
 /* app.use(express.static('public'));
 app.use('/images', express.static('public/images')); */
