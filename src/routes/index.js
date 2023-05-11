@@ -2,6 +2,7 @@ const router = require('express').Router();
 const pagesRouter = require('./pages/pages.routes');
 const sessionRouter = require('./session/session.routes');
 const cartRouter = require('./cart/cart.routes');
+const orderRouter = require('./order/order.routes.js')
 const infoRouter = require('./info/info.routes');
 
 router.get('/health', (_req, res) => {
@@ -12,7 +13,8 @@ router.get('/health', (_req, res) => {
 })
 .use(pagesRouter)
 .use(sessionRouter)
-.use('/cart', cartRouter)
+.use(cartRouter)
+.use(orderRouter)
 .use('/info', infoRouter)
 
 module.exports = router;

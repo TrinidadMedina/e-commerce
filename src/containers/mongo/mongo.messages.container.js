@@ -11,40 +11,33 @@ class MessagesContainer{
             const message = await messageModel.create(data);
             return message;
         }catch(err){
-            console.error(err);
             throw new Error(err);
         }
     };
 
     async getMessages() {
         try{
-            const messages = await messageModel.find().
-            populate('user');
+            const messages = await messageModel.find()
+            .populate('user');
+            
             if(messages.length === 0){
                 return null
             }
             return messages
         }catch(err){
-            console.error(err);
             throw new Error(err);
         }   
     };
 
-    async getMessage(user) {
+    async getMessage(email) {
         try{
-            const user = await userModel.findOne({email: user});
+            const user = await userModel.findOne({email: email});
             const messages = await messageModel.find({user: user._id}).populate('user');
-/*             const messages = await messageModel.find().
-            populate({
-                path: 'userModel',
-                select: '-_id, name'
-            }); */
             if(messages.length === 0){
                 return null
             }
             return messages
         }catch(err){
-            console.error(err);
             throw new Error(err);
         }   
     };
