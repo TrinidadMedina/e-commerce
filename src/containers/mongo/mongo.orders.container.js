@@ -8,10 +8,17 @@ class OrdersContainer{
     async createOrder(email) {
         try{
             const user = await userModel.findOne({email: email});
-            const cart = await cartModel.findOne({user: user._id});
+            const cart = await cartModel.findOne({user: user._id}).populate('products.product');
+            let suma = 0;
+            const newProducts =cart.products.map(prod => {
+                const total = prod.quant * prod.product.price;
+                suma += total;
+                return { ...prod.toObject(), total };
+            })
             const data = {
                 user : user._id,
-                products : cart.products
+                products : newProducts,
+                total: suma
             };
             const order = await orderModel.create(data);
             return order;

@@ -32,6 +32,7 @@ class CartServices {
     async createCart(userEmail, productUuid) {
         const data = {uuid: uuidv4(), user: userEmail, products: productUuid};
         const newCart = await this.dao.create(data);
+        
         return newCart;
     };
 

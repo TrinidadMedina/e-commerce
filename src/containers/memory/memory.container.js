@@ -45,19 +45,23 @@ class MemoryCartDAO extends CartDAO {
       if(_.isNil(cart)){
         return cart
       }
+      let suma = 0;
       const products = cart.products.map(product => {
         const productData = product.product;
+        const total = productData.price * product.quant;
+        suma += total;
         const productDTO = new ProductDTO(
             productData.uuid,
             productData.name,
             productData.description,
             productData.image,
             productData.price,
-            product.quant
+            product.quant,
+            total
         );
         return productDTO;
       });
-      const cartDTO = {products};
+      const cartDTO = {products, suma};
       return cartDTO
     }catch(err){
       throw new Error(err)
