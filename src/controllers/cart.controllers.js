@@ -9,8 +9,7 @@ exports.createCart =  async (req, res, next)=>{
         const {email} = req.user; 
         const {productUuid} = req.body; 
         const result = await cartServices.createCart(email, productUuid);
-        const productsData = await cartServices.getProducts();
-        return res.render('home', {options: productsData, error: result, userData : req.user })
+        return res.redirect(`/home?message=${result}`);
     }catch(err){
         next(err);
     } 
@@ -25,11 +24,14 @@ exports.createProduct =  async (req, res, next)=>{
                 message: 'Body data missing'
             });
         };
-        if(_.every(_.values(req.body), _.isNil)){
-            return res.status(400).json('Faltan parámetros')
-        }
-        await cartServices.createProduct(body);
-        res.redirect('/home')
+        if (_.isNil(body.name) || _.isNil(body.description) || _.isNil(body.category) || _.isNil(body.image) || _.isNil(body.price) || _.isNil(body.stock)){
+            return res.status(400).json({
+                success: false, 
+                message: 'Product atributte missing'
+            });
+        };
+        const result = await cartServices.createProduct(body);
+        res.status(200).json(result);
     }catch(err){
         next(err);
     } 
@@ -73,8 +75,7 @@ exports.buyCart =  async (req, res, next)=>{
         await sendMessage(`+56${adminNumber}`, 'su pedido ha sido recibido y se encuentra en proceso');
         await ordersServices.createOrder(userData.email);
         await cartServices.deleteCart(userData.email);
-        const productsData = await cartServices.getProducts();
-        return res.render('home', {options: productsData, error: 'Tu orden fue recibida con éxito', userData })
+        return res.redirect(`/home?message=Tu orden fue recibida con éxito`);
     }catch(err){
         next(err);
     } 

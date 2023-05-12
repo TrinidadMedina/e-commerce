@@ -3,6 +3,7 @@ class CartDAO {
     async createProduct(product) {}
     async getCart(userEmail) {}
     async getProducts() {}
+    async getProductsCategory(category) {}
     async insertProduct(userEmail, productUuid) {}
     async deleteProduct(userEmail, productUuid) {}
     async delete(userEmail) {}

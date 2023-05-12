@@ -8,7 +8,7 @@ const ProductDTO = require('../../dtos/product.dto')
 class MongoCartDAO extends CartDAO {
     constructor() {
       super();
-    }
+    };
   
     async create(data) {
         try{
@@ -33,7 +33,7 @@ class MongoCartDAO extends CartDAO {
         }
     };
   
-/*     async createProduct(data) {
+    async createProduct(data) {
         try{
             const product = await productModel.findOne({name: data.name});
             if(product){
@@ -43,7 +43,7 @@ class MongoCartDAO extends CartDAO {
         }catch(err){
             throw new Error(err)
         }
-    } */
+    };
 
     async getCart(userEmail) {
         try{
@@ -61,6 +61,7 @@ class MongoCartDAO extends CartDAO {
                     productData.uuid,
                     productData.name,
                     productData.description,
+                    productData.category,
                     productData.image,
                     productData.price,
                     product.quant,
@@ -83,6 +84,27 @@ class MongoCartDAO extends CartDAO {
                     product.uuid,
                     product.name,
                     product.description,
+                    product.category,
+                    product.image,
+                    product.price
+                );
+                return productDTO;
+            });
+            return productsDTO
+        }catch(err){
+            throw new Error(err);
+        }   
+    };
+
+    async getProductsCategory(category) {
+        try{
+            const products = await productModel.find({category: category});
+            const productsDTO = products.map(product => {
+                const productDTO = new ProductDTO(
+                    product.uuid,
+                    product.name,
+                    product.description,
+                    product.category,
                     product.image,
                     product.price
                 );

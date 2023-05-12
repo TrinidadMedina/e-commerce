@@ -10,7 +10,7 @@ const {
 
 router
 .post('/create', authMiddleware, createCart)
-.post('/product', authMiddleware, createProduct)
+.post('/create-product', createProduct)
 .post('/insert', authMiddleware, insertProduct)
 .post('/delete', authMiddleware, deleteProduct)
 .post('/buy', authMiddleware, buyCart)
