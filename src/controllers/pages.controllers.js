@@ -1,5 +1,6 @@
 const cartServices = require('../services/cart/cart.services');
-const ordersServices = require('../services/orders/orders.services')
+const ordersServices = require('../services/orders/orders.services');
+const _ = require('lodash');
 
 exports.getLogin = async (req, res, next) => {
     try{
@@ -34,9 +35,18 @@ exports.getSignup = async (req, res, next) => {
 exports.getHome = async (req, res, next) => {
     try{
         const userData = req.user;
-        const data = await cartServices.getProducts();
-        res.render('home', {options: data, userData, error: null});
-
+        if(_.isEmpty(req.query)){
+            const data = await cartServices.getProducts();
+            return res.render('home', {options: data, userData, error: null});
+        }
+        if(req.query.categoria){
+            const data = await cartServices.getProductsCategory(req.query.categoria);
+            return res.render('home', {options: data, userData, error: null});
+        }
+        if(req.query.message){
+            const data = await cartServices.getProducts();
+            return res.render('home', {options: data, userData, error: req.query.message});
+        }   
     }catch(err){
         next(err);
     }

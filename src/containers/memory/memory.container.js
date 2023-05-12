@@ -9,7 +9,7 @@ class MemoryCartDAO extends CartDAO {
     super();
     this.carts = [];
     this.products = [];
-  }
+  };
 
   async create(data) {
     try{
@@ -37,7 +37,7 @@ class MemoryCartDAO extends CartDAO {
     }catch(err){
       throw new Error(err);
     }
-  }
+  };
 
   async getCart(userEmail) {
     try{
@@ -54,6 +54,7 @@ class MemoryCartDAO extends CartDAO {
             productData.uuid,
             productData.name,
             productData.description,
+            productData.category,
             productData.image,
             productData.price,
             product.quant,
@@ -66,12 +67,12 @@ class MemoryCartDAO extends CartDAO {
     }catch(err){
       throw new Error(err)
     }
-  }
+  };
 
   async createProduct(productData) {
     this.products.push(new ProductModel(productData));
     return this.products
-  }
+  };
   
   async getProducts() {
     try{
@@ -79,7 +80,16 @@ class MemoryCartDAO extends CartDAO {
     }catch(err){
       throw new Error(err)
     }
-  }
+  };
+
+  async getProductsCategory(category) {
+    try{
+      const products = this.products.filter(p => p.category === category);
+      return products;
+    }catch(err){
+      throw new Error(err)
+    }
+  };
 
   async insertProduct(userEmail, productUuid) {
     try{
@@ -97,7 +107,8 @@ class MemoryCartDAO extends CartDAO {
     }catch(err){
       throw new Error(err)
     }
-  }
+  };
+
   async deleteProduct(userEmail, productUuid) {
     try{
       this.carts = this.carts.map(cart => {
@@ -115,11 +126,11 @@ class MemoryCartDAO extends CartDAO {
         }
         return cart;
       });
-
     }catch(err){
-      throw new Error(err)
+      throw new Error(err);
     }
-  }
+  };
+
   async delete(userEmail) {
     try{
       const index = this.carts.findIndex(cart => cart.user.toString() == userEmail.toString());
@@ -128,7 +139,7 @@ class MemoryCartDAO extends CartDAO {
     }catch(err){
       throw new Error(err)
     }
-  }
+  };
 
 }
 
