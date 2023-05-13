@@ -9,7 +9,7 @@ const {
 } = require ('../../controllers/cart.controllers');
 
 router
-.post('/create', authMiddleware, createCart)
+.post('/', authMiddleware, createCart)
 .post('/create-product', createProduct)
 .post('/insert', authMiddleware, insertProduct)
 .post('/delete', authMiddleware, deleteProduct)

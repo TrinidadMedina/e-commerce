@@ -7,8 +7,11 @@ const {sendMessage} = require('../utils/twilio');
 exports.createCart =  async (req, res, next)=>{
     try{
         const {email} = req.user; 
-        const {productUuid} = req.body; 
+        const {productUuid, category} = req.body; 
         const result = await cartServices.createCart(email, productUuid);
+        if(category){
+            return res.redirect(`/home?categoria=${category}&message=${result}`);
+        }
         return res.redirect(`/home?message=${result}`);
     }catch(err){
         next(err);

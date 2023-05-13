@@ -2,6 +2,7 @@ const router = require('express').Router();
 const authMiddleware = require('../../middlewares/auth.middleware');
 
 const {
+    redirectLogin,
     getLogin,
     getSignup,
     getHome,
@@ -13,7 +14,8 @@ const {
 } = require ('../../controllers/pages.controllers');
 
 router
-.get('/', getLogin)
+.get('/', redirectLogin)
+.get('/login', getLogin)
 .get('/signup', getSignup)
 .get('/home', authMiddleware, getHome)
 .get('/cart', authMiddleware, getCart)
