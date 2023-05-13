@@ -1,6 +1,9 @@
 const orderModel = require('./models/mongo.orders.model');
 const userModel = require('./models/mongo.user.model');
 const cartModel = require('./models/mongo.cart.model');
+const ProductDTO = require('../../dtos/product.dto');
+const UserDTO = require('../../dtos/user.dto');
+const OrderDTO = require('../../dtos/order.dto')
 
 class OrdersContainer{
     constructor(){}
@@ -21,7 +24,8 @@ class OrdersContainer{
                 total: suma
             };
             const order = await orderModel.create(data);
-            return order;
+            const newOrder = await this.getOrder(order.number);
+            return newOrder;
         }catch(err){
             throw new Error(err);
         }
@@ -32,12 +36,45 @@ class OrdersContainer{
             const user = await userModel.findOne({email: email});
             const orders = await orderModel.find({user: user._id})
             .populate('user')
-            .populate('products.product')
-
+            .populate('products.product');
             if(orders.length === 0){
-                return null
+                return null;
             }
-            return orders
+            const ordersCopy = [...orders];
+            const newOrders = ordersCopy.map(order => {
+                const userDTO = new UserDTO(
+                    order.user.email,
+                    order.user.username,
+                    order.user.address,
+                    order.user.age,
+                    order.user.number,
+                    order.user.image
+                );
+                const products = order.products.map(product => {
+                    const productData = product.product;
+                    const productDTO = new ProductDTO(
+                        productData.uuid,
+                        productData.name,
+                        productData.description,
+                        productData.category,
+                        productData.image,
+                        productData.price,
+                        product.quant,
+                        product.total
+                    );
+                    return productDTO;
+                });
+                const orderDTO = new OrderDTO(
+                    order.number,
+                    new Date(order.timestamp),
+                    order.status,
+                    userDTO,
+                    products,
+                    order.total  
+                );
+                return orderDTO;
+            });
+            return newOrders
         }catch(err){
             throw new Error(err);
         }   
@@ -47,12 +84,41 @@ class OrdersContainer{
         try{
             const order = await orderModel.findOne({number: orderNumber})
             .populate('user')
-            .populate('products.product')
-
+            .populate('products.product');
             if(!order){
-                return null
+                return null;
             }
-            return order
+            const userDTO = new UserDTO(
+                order.user.email,
+                order.user.username,
+                order.user.address,
+                order.user.age,
+                order.user.number,
+                order.user.image
+            );
+            const products = order.products.map(product => {
+                const productData = product.product;
+                const productDTO = new ProductDTO(
+                    productData.uuid,
+                    productData.name,
+                    productData.description,
+                    productData.category,
+                    productData.image,
+                    productData.price,
+                    product.quant,
+                    product.total
+                );
+                return productDTO;
+            });
+            const orderDTO = new OrderDTO(
+                order.number,
+                new Date(order.timestamp),
+                order.status,
+                userDTO,
+                products,
+                order.total  
+            );
+            return orderDTO;
         }catch(err){
             console.error(err);
             throw new Error(err);
