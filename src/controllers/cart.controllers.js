@@ -42,8 +42,7 @@ exports.insertProduct = async (req, res, next) => {
         const {productUuid} = req.body;  
         const {email} = req.user; 
         await cartServices.insertProduct(email, productUuid);
-        const data = await cartServices.getCart(email);
-        return res.render('cart', { options: data, error: null, userData: req.user});
+        return res.redirect(`/cart`);
     }catch(err){
         next(err);
     }
@@ -54,8 +53,7 @@ exports.deleteProduct = async (req, res, next)=>{
         const {productUuid} = req.body;  
         const {email} = req.user; 
         await cartServices.deleteProduct(email, productUuid);
-        const data = await cartServices.getCart(email);
-        return res.render('cart', { options: data, error: null, userData: req.user});
+        return res.redirect(`/cart`);
     }catch(err){
         next(err);
     } 
