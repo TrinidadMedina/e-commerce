@@ -66,16 +66,38 @@ exports.buyCart =  async (req, res, next)=>{
     try{
         const adminNumber = '992182531';
         const userData = req.user; 
-        const cart = await cartServices.getCart(userData.email);
-        const listProduct = cart.products.map(prod => {
-           return {name: prod.name, price: prod.price, quantity: prod.quant, total: prod.price*prod.quant}
-        })
-        const finalData = {name: userData.username, email: userData.email, number: userData.number, address: userData.address, products: listProduct}
-        await sendMail(`nuevo pedido de ${finalData.name}, ${finalData.email}`, JSON.stringify(finalData));
-        await sendMessage(`whatsapp:+56${adminNumber}`, JSON.stringify(finalData));
-        await sendMessage(`+56${adminNumber}`, 'su pedido ha sido recibido y se encuentra en proceso');
-        await ordersServices.createOrder(userData.email);
+        const order = await ordersServices.createOrder(userData.email);
         await cartServices.deleteCart(userData.email);
+
+        let contenidoCorreo = `<h4>Orden N° ${order.number}:</h4>`;
+        for (const key in order) {
+            if (order.hasOwnProperty(key)) {
+                let valor = order[key];
+                let contenidoValor = '';
+                if(key === 'user'){
+                    valor = [valor];
+                }
+                if (Array.isArray(valor) && valor.length > 0 && typeof valor[0] === 'object') {
+                    contenidoValor += '<ul>';
+                    valor.forEach((elemento) => {
+                        contenidoValor += '<li>';
+                            for (const propiedad in elemento) {
+                                if (elemento.hasOwnProperty(propiedad)) {
+                                    contenidoValor += `${propiedad}: ${elemento[propiedad]} <br> `;
+                                }
+                            }
+                        contenidoValor += '</li>';
+                });
+                contenidoValor += '</ul>';
+                } else {
+                    contenidoValor = valor.toString();
+                }
+                contenidoCorreo += `<p>${key}: ${contenidoValor}</p>`;
+            }
+        }
+        await sendMail(`nuevo pedido de ${order.user.username}, ${order.user.email}`, contenidoCorreo);
+        await sendMessage(`whatsapp:+56${adminNumber}`, contenidoCorreo);
+        await sendMessage(`+56${adminNumber}`, 'su pedido ha sido recibido y se encuentra en proceso');
         return res.redirect(`/home?message=Tu orden fue recibida con éxito`);
     }catch(err){
         next(err);

@@ -69,6 +69,7 @@ class MongoCartDAO extends CartDAO {
                 );
                 return productDTO;
             });
+            suma = suma.toLocaleString("es-CL", { style: "currency", currency: "CLP" });
             const cartDTO = {products, suma};
             return cartDTO;
         }catch(err){

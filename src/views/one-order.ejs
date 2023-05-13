@@ -25,15 +25,10 @@
       </button>
       <!-- Contenido del menú -->
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <h4>Catálogo</h4>
-          </li>
-        </ul>
         <!-- Botones alineados a la derecha -->
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link active" href="/">Catálogo</a>
+            <a class="nav-link" href="/">Catálogo</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -75,22 +70,22 @@
   <main>
     <div class="mx-auto mt-5" style="width: 500px;">
       <h4 class="">Orden N° <%= options.number %></h4>
-      <p><%= options.date %></p>
+      <p><%= options.timestamp %></p>
     </div>
     <table class="table mx-auto mt-5" style="width: 500px;">
       <tbody>
           <% options.products.forEach(p=>{ %>
               <tr>
-                <td><img class="img-fluid" style='width: 50px' src= <%= p.product.image %> ></td>
+                <td><img class="img-fluid" style='width: 50px' src= <%= p.image %> ></td>
                 <td style="line-height: 0.5;">
-                  <p ><%= p.product.name %></p>
-                  <p style="font-size: 12px">$<%= p.product.price %></p>
+                  <p ><%= p.name %></p>
+                  <p style="font-size: 12px"><%= p.price %></p>
                 </td>
                 <td>
                   <p >x <%= p.quant %></p>
                 </td>
                 <td>
-                  <p >$ <%= p.total %></p>
+                  <p ><%= p.total %></p>
                 </td>
               </tr>
           <% }) %>
@@ -98,7 +93,7 @@
             <td></td>
             <td></td>
             <td>Total: </td>
-            <td>$ <%= options.total %></td>
+            <td><%= options.total %></td>
           </tr>
       </tbody>
     </table>

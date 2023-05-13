@@ -27,13 +27,13 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <h4>Catálogo</h4>
+            <h4>Mi carrito</h4>
           </li>
         </ul>
         <!-- Botones alineados a la derecha -->
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link active" href="/">Catálogo</a>
+            <a class="nav-link" href="/">Catálogo</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -47,7 +47,7 @@
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/cart">Carrito</a>
+            <a class="nav-link active" href="/cart">Carrito</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/chat">Chat</a>
@@ -86,17 +86,17 @@
                 <h4 class="mx-auto text-center mt-5">Aún no has agregado productos a tu carro</h4>
               </div>
             <% } else { %>
-              <tr>
+              <tr style='width: 50px'>
                 <td><img class="img-fluid" style='width: 50px' src= <%= p.image %> ></td>
                 <td style="line-height: 0.5;">
                   <p ><%= p.name %></p>
-                  <p style="font-size: 12px">$ <%= p.price %></p>
+                  <p style="font-size: 12px"><%= p.price %></p>
                 </td>
                 <td>
                   <p>x <%= p.quant %></p>
                 </td>
                 <td>
-                  <p>$ <%= p.total%></p>
+                  <p><%= p.total%></p>
                 </td>
                 <td>
                   <div class="d-flex justify-content-between align-items-center">
@@ -119,7 +119,7 @@
             <td></td>
             <td></td>
             <td>Total: </td>
-            <td>$ <%= options.suma %></td>
+            <td><%= options.suma %></td>
           </tr>
       </tbody>
     </table>
