@@ -19,14 +19,32 @@
         <img src="https://cdn1.iconfinder.com/data/icons/supermarket-20/64/supermarket-grocery-store-food-512.png" width="30" height="30" class="d-inline-block align-top" alt="">
         la tienda
       </a>
-      <h3 class="nav-link active mx-auto">Mis órdenes</h3>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <!-- Botón para dispositivos móviles -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <!-- Contenido del menú -->
+      <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="/">Catálogo</a>
+            <h4>Catálogo</h4>
+          </li>
+        </ul>
+        <!-- Botones alineados a la derecha -->
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="/">Catálogo</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Busca por categoría
+            </a>
+            <!-- Contenido del menú desplegable -->
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/home?categoria=comida">Comida</a>
+              <a class="dropdown-item" href="/home?categoria=utensilio">Utensilios</a>
+              <a class="dropdown-item" href="/home?categoria=electrodoméstico">Electrodomésticos</a>
+            </div>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/cart">Carrito</a>
@@ -34,6 +52,8 @@
           <li class="nav-item">
             <a class="nav-link" href="/chat">Chat</a>
           </li>
+        </ul>
+        <ul class="navbar-nav ml-0">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <div style="  width: 40px; height: 40px; border-radius: 50%; overflow: hidden;">
@@ -52,7 +72,6 @@
       </div>
     </nav>
 	</header>
-
   <main>
     <div class="mx-auto mt-5" style="width: 500px;">
       <h4 class="">Orden N° <%= options.number %></h4>
