@@ -7,7 +7,7 @@
   <script src="https://cdn.socket.io/4.3.1/socket.io.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const socket = io(window.location.origin);
+      const socket = io();
       const formPublicarMensaje = document.getElementById('formPublicarMensaje')
       formPublicarMensaje.addEventListener('submit', e => {
           e.preventDefault()
