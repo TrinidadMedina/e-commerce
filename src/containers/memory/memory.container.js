@@ -22,18 +22,18 @@ class MemoryCartDAO extends CartDAO {
         const newCart =  new CartModel(data);
         newCart.products.push({product, quant:1});
         this.carts.push(newCart);
-        return
+        return 'Producto agregado';
       }
 
       for(let i = 0; i < cart.products.length; i++){
         if(cart.products[i].product.uuid == data.products){
-          return 'Producto ya existe en tu carro'
+          return 'Producto ya existe en tu carro';
         }
       }
       const index = this.carts.findIndex(cart => cart.user.toString() == data.user.toString());
-      cart.products.push({product, quant: 1})
+      cart.products.push({product, quant: 1});
       this.carts.splice(index, 1, cart);
-      return;
+      return 'Producto agregado';
     }catch(err){
       throw new Error(err);
     }
@@ -62,6 +62,7 @@ class MemoryCartDAO extends CartDAO {
         );
         return productDTO;
       });
+      suma = suma.toLocaleString("es-CL", { style: "currency", currency: "CLP" });
       const cartDTO = {products, suma};
       return cartDTO
     }catch(err){
@@ -76,7 +77,19 @@ class MemoryCartDAO extends CartDAO {
   
   async getProducts() {
     try{
-      return this.products;
+      const products = this.products;
+      const productsDTO = products.map(product => {
+          const productDTO = new ProductDTO(
+              product.uuid,
+              product.name,
+              product.description,
+              product.category,
+              product.image,
+              product.price
+          );
+          return productDTO;
+      });
+      return productsDTO;
     }catch(err){
       throw new Error(err)
     }
@@ -85,7 +98,18 @@ class MemoryCartDAO extends CartDAO {
   async getProductsCategory(category) {
     try{
       const products = this.products.filter(p => p.category === category);
-      return products;
+      const productsDTO = products.map(product => {
+        const productDTO = new ProductDTO(
+            product.uuid,
+            product.name,
+            product.description,
+            product.category,
+            product.image,
+            product.price
+        );
+        return productDTO;
+      })
+      return productsDTO;
     }catch(err){
       throw new Error(err)
     }
