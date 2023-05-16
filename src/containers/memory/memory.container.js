@@ -1,27 +1,28 @@
 const _ = require('lodash');
-const CartDAO = require('../../daos/cart.dao');
+const CartDAO = require('../../daos/cart/cart.dao');
 const CartModel = require('./models/memory.cart.model');
 const ProductModel = require('./models/memory.product.model');
-const ProductDTO = require('../../dtos/product.dto')
+const ProductDTO = require('../../dtos/product.dto');
+
+let carts = [];
+let products = [];
 
 class MemoryCartDAO extends CartDAO {
   constructor() {
     super();
-    this.carts = [];
-    this.products = [];
   };
 
   async create(data) {
     try{
       let cart = null;
-      const product = this.products.find(product => product.uuid == data.products);
-      if(this.carts.length !== 0){
-        cart = this.carts.find(cart => cart.user.toString() == data.user.toString());
+      const product = products.find(product => product.uuid == data.products);
+      if(carts.length !== 0){
+        cart = carts.find(cart => cart.user.toString() == data.user.toString());
       }
       if(_.isNil(cart)){
         const newCart =  new CartModel(data);
         newCart.products.push({product, quant:1});
-        this.carts.push(newCart);
+        carts.push(newCart);
         return 'Producto agregado';
       }
 
@@ -30,9 +31,9 @@ class MemoryCartDAO extends CartDAO {
           return 'Producto ya existe en tu carro';
         }
       }
-      const index = this.carts.findIndex(cart => cart.user.toString() == data.user.toString());
+      const index = carts.findIndex(cart => cart.user.toString() == data.user.toString());
       cart.products.push({product, quant: 1});
-      this.carts.splice(index, 1, cart);
+      carts.splice(index, 1, cart);
       return 'Producto agregado';
     }catch(err){
       throw new Error(err);
@@ -41,7 +42,7 @@ class MemoryCartDAO extends CartDAO {
 
   async getCart(userEmail) {
     try{
-      const cart = this.carts.find((cart) => cart.user.toString() === userEmail.toString());
+      const cart = carts.find((cart) => cart.user.toString() === userEmail.toString());
       if(_.isNil(cart)){
         return cart
       }
@@ -63,7 +64,7 @@ class MemoryCartDAO extends CartDAO {
         return productDTO;
       });
       suma = suma.toLocaleString("es-CL", { style: "currency", currency: "CLP" });
-      const cartDTO = {products, suma};
+      const cartDTO = {user: cart.user, products, suma};
       return cartDTO
     }catch(err){
       throw new Error(err)
@@ -71,13 +72,12 @@ class MemoryCartDAO extends CartDAO {
   };
 
   async createProduct(productData) {
-    this.products.push(new ProductModel(productData));
-    return this.products
+    products.push(new ProductModel(productData));
+    return products
   };
   
   async getProducts() {
     try{
-      const products = this.products;
       const productsDTO = products.map(product => {
           const productDTO = new ProductDTO(
               product.uuid,
@@ -97,8 +97,8 @@ class MemoryCartDAO extends CartDAO {
 
   async getProductsCategory(category) {
     try{
-      const products = this.products.filter(p => p.category === category);
-      const productsDTO = products.map(product => {
+      const newProducts = products.filter(p => p.category === category);
+      const productsDTO = newProducts.map(product => {
         const productDTO = new ProductDTO(
             product.uuid,
             product.name,
@@ -117,7 +117,7 @@ class MemoryCartDAO extends CartDAO {
 
   async insertProduct(userEmail, productUuid) {
     try{
-      this.carts = this.carts.map(cart => {
+      carts = carts.map(cart => {
         if(cart.user.toString() == userEmail.toString()){
           cart.products.map(product => {
             if(product.product.uuid.toString() == productUuid.toString()){
@@ -135,7 +135,7 @@ class MemoryCartDAO extends CartDAO {
 
   async deleteProduct(userEmail, productUuid) {
     try{
-      this.carts = this.carts.map(cart => {
+      carts = carts.map(cart => {
         if(cart.user.toString() == userEmail.toString()){
           cart.products.map((product, index) => {
             if(product.product.uuid.toString() == productUuid.toString()){
@@ -157,15 +157,15 @@ class MemoryCartDAO extends CartDAO {
 
   async delete(userEmail) {
     try{
-      const index = this.carts.findIndex(cart => cart.user.toString() == userEmail.toString());
-      this.carts.splice(index, 1);
+      const index = carts.findIndex(cart => cart.user.toString() == userEmail.toString());
+      carts.splice(index, 1);
       return
     }catch(err){
       throw new Error(err)
     }
   };
 
-}
+};
 
 module.exports = MemoryCartDAO;
 

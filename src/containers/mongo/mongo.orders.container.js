@@ -3,10 +3,13 @@ const userModel = require('./models/mongo.user.model');
 const cartModel = require('./models/mongo.cart.model');
 const ProductDTO = require('../../dtos/product.dto');
 const UserDTO = require('../../dtos/user.dto');
-const OrderDTO = require('../../dtos/order.dto')
+const OrderDTO = require('../../dtos/order.dto');
+const OrderDAO = require('../../daos/order/order.dao');
 
-class OrdersContainer{
-    constructor(){}
+class MongoOrdersDAO extends OrderDAO {
+    constructor(){
+        super();
+    }
 
     async createOrder(email) {
         try{
@@ -126,4 +129,4 @@ class OrdersContainer{
     };
 }
 
-module.exports = new OrdersContainer();
+module.exports = MongoOrdersDAO;

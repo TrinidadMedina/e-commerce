@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const CartDAO = require('../../daos/cart.dao');
+const CartDAO = require('../../daos/cart/cart.dao');
 const cartModel = require('./models/mongo.cart.model');
 const productModel = require('./models/mongo.product.model');
 const userModel = require('./models/mongo.user.model');

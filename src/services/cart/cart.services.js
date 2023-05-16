@@ -1,5 +1,5 @@
 const {v4 : uuidv4} = require('uuid');
-const CartDAOFactory = require('../../daos/factory');
+const CartDAOFactory = require('../../daos/cart/cart.factory');
 
 const daoType = process.argv[2] || 'mongo';
 

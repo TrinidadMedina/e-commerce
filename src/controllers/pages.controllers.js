@@ -90,19 +90,22 @@ exports.getUserInfo = async (req, res, next) => {
     }
 };
 
-exports.getError = async (_req, res, next) => {
-    try{
-        return res.render('error', {error: 'error'});
-    }catch(err){
-        next(err)
-    }
-};
-
 exports.getOrders = async (req, res, next) => {
     try{
         const userData = req.user;
         const data = await ordersServices.getOrders(userData.email);
         return res.render('orders', {options: data, userData, error: null});
+    }catch(err){
+        next(err);
+    }
+};
+
+exports.getOrder = async (req, res, next) => {
+    try{
+        const userData = req.user;
+        const {orderNumber} = req.query;
+        const data = await ordersServices.getOrder(orderNumber);
+        return res.render('one-order', {options: data, userData, error: null});
     }catch(err){
         next(err);
     }
@@ -114,5 +117,13 @@ exports.getChat = async (req, res, next) => {
         return res.render('chat', {userData, error: null});
     }catch(err){
         next(err);
+    }
+};
+
+exports.getError = async (_req, res, next) => {
+    try{
+        return res.render('error', {error: 'error'});
+    }catch(err){
+        next(err)
     }
 };
