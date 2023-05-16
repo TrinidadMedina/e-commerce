@@ -13,7 +13,6 @@ const {getSignout} = require ('../../controllers/session.controllers');
 //const upload = multer({ storage: storage });
 router
 .post('/signup',/*  upload.single("image"), */ (req, res) =>{
-  console.log(req.body)
   passport.authenticate('signup', {
     successRedirect: '/home',
     failureRedirect: '/signup',
