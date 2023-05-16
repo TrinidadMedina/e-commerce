@@ -95,7 +95,7 @@ exports.buyCart =  async (req, res, next)=>{
                 contenidoCorreo += `<p>${key}: ${contenidoValor}</p>`;
             }
         }
-        await sendMail(`nuevo pedido de ${order.user.username}, ${order.user.email}`, contenidoCorreo);
+        await sendMail(`nuevo pedido de ${userData.username}, ${userData.email}`, contenidoCorreo);
         await sendMessage(`whatsapp:+56${adminNumber}`, contenidoCorreo);
         await sendMessage(`+56${adminNumber}`, 'su pedido ha sido recibido y se encuentra en proceso');
         return res.redirect(`/home?message=Tu orden fue recibida con éxito`);
